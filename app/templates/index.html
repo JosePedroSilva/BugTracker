@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Hi, {{ user.username }}!</h1>
+    {% for ticket in tickets %}
+    <div>
+        <p>{{ ticket.ref }}: <b>{{ ticket.desc }}</b></p>
+    </div>
+    {% endfor %}
+{% endblock %}
