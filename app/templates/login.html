@@ -9,6 +9,19 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
     </head>
 <body>
+
+    <!-- To remove  -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    <!-- To remove  -->
+    
     <div class="login-content">
         <h1>Bug Tracker</h1>
         <form action="" method="post" novalidate>

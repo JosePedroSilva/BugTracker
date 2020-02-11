@@ -3,8 +3,6 @@
 {% block content %}
     <h1>Hi, {{ current_user.username }}!</h1>
     {% for ticket in tickets %}
-    <div>
-        <p>{{ ticket.ref }}: <b>{{ ticket.desc }}</b></p>
-    </div>
+        {% include '_ticket.html' %}
     {% endfor %}
 {% endblock %}

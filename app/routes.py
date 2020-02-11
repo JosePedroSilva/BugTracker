@@ -3,8 +3,8 @@ from flask import render_template, flash, redirect, url_for, request
 from werkzeug.urls import url_parse
 from flask_login import logout_user, login_required, current_user, login_user
 from app import app, db
-from app.forms import LoginForm, RegistrationForm
-from app.models import User
+from app.forms import LoginForm, RegistrationForm, TicketForm
+from app.models import User, Ticket
 
 @app.before_request
 def before_request():
@@ -17,16 +17,7 @@ def before_request():
 @login_required
 def index():
     user = {'username': 'Joe'}
-    tickets = [
-        {
-            'ref': 'BT-1',
-            'desc': 'Bug description text'
-        },
-        {
-            'ref': 'BT-2',
-            'desc': "My app doesn't work anymore HELP"
-        }
-        ]
+    tickets = Ticket.query.order_by(Ticket.timestamp.desc()).all()
     return render_template('index.html', title='HomePage', tickets=tickets)
 
 
@@ -84,4 +75,15 @@ def user(username):
     ]
     return render_template('issues.html', user=user, tickets=tickets)
 
+@app.route('/create', methods=['GET', 'POST'])
+@login_required
+def create():
+    form = TicketForm()
+    if form.validate_on_submit():
+        ticket = Ticket(description=form.ticket.data, author=current_user)
+        db.session.add(ticket)
+        db.session.commit()
+        flash('Your ticket has been raised.')
+        return redirect(url_for('index'))
+    return render_template('create.html', title='Createticket', form=form)
 

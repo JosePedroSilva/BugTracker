@@ -11,6 +11,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     tickets = db.relationship('Ticket', backref='author', lazy='dynamic')
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+    owner = db.relationship('Ticket', backref='owner', lazy='dynamic')
 
     def __repr__(self):
         return f'<User {self.username}>'
@@ -28,6 +29,7 @@ class Ticket(db.Model):
     description = db.Column(db.String(1000))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     def __repr__(self):
         return f'<Ticket {self.id}: {self.description}>'
