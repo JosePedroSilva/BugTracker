@@ -6,7 +6,6 @@ from app import app, db
 from app.forms import LoginForm, RegistrationForm
 from app.models import User
 
-
 @app.before_request
 def before_request():
     if current_user.is_authenticated:
@@ -69,7 +68,7 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 
-@app.route('/issuesraised/<username>')
+@app.route('/issues_raised/<username>')
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
@@ -84,3 +83,5 @@ def user(username):
     }
     ]
     return render_template('issues.html', user=user, tickets=tickets)
+
+
