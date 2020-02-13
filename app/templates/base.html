@@ -17,19 +17,19 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                  <a class="nav-link" href="{{ url_for('user', username=current_user.username) }}">Tickets Raised <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item active">
-                  <a class="nav-link" href="{{ url_for('create') }}">Create <span class="sr-only">(current)</span></a>
+                  <a class="nav-link" href="{{ url_for('create') }}">Create Ticket<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                <li class="nav-item active">
+                  <a class="nav-link" href="{{ url_for('user', username=current_user.username) }}">My Tickets<span class="sr-only">(current)</span></a>
+                </li>
+                  <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('settings') }}">Options</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{{ url_for('register') }}">Register</a>
                 </li>
               </ul>
               <form class="form-inline my-2 my-lg-0">

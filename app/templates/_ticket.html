@@ -1,5 +1,10 @@
 <table class="table table-hover">
     <tr valign="top">
-        <td><br>{{ ticket.id }}: {{ ticket.description }} <br> {{ ticket.timestamp }} <br></td>
+        <td> <a href="#"> Ref: {{ ticket.id }}</a> 
+            <br>{{ ticket.description }} 
+            <br>
+            <br> {{ ticket.timestamp }} 
+            <br>Created by: {{ ticket.author.username }} 
+        </td>
     </tr>
 </table>

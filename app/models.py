@@ -26,7 +26,6 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
 
-
 class Ticket(db.Model):
     __tablename__='tickets'
     id = db.Column(db.Integer, primary_key=True)

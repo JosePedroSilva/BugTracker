@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1>Hi, {{ current_user.username }}!</h1>
-    {% for ticket in tickets %}
-        {% include '_ticket.html' %}
-    {% endfor %}
+        {% for ticket in tickets %}
+            {% include '_ticket.html' %}
+        {% endfor %}
 {% endblock %}

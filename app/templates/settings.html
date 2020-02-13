@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link active" href="{{ url_for('settings') }}">About</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url_for('register') }}">Create New User</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Change Password</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+    </li>
+  </ul>
+  
+
+  <p>This option page is to be implemented only for ADMIN <br>User option page won't allow to create new users</p>
+{% endblock %}

@@ -16,7 +16,6 @@ def before_request():
 @app.route('/index')
 @login_required
 def index():
-    user = {'username': 'Joe'}
     tickets = Ticket.query.order_by(Ticket.timestamp.desc()).all()
     return render_template('index.html', title='HomePage', tickets=tickets)
 
@@ -59,7 +58,7 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 
-@app.route('/issues_raised/<username>')
+@app.route('/mytickets/<username>')
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
@@ -86,4 +85,10 @@ def create():
         flash('Your ticket has been raised.')
         return redirect(url_for('index'))
     return render_template('create.html', title='Createticket', form=form)
+
+
+@app.route('/settings')
+@login_required
+def settings():
+    return render_template('settings.html')
 
