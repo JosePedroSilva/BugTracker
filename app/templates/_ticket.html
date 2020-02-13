@@ -4,7 +4,8 @@
             <br>{{ ticket.description }} 
             <br>
             <br> {{ ticket.timestamp }} 
-            <br>Created by: {{ ticket.author.username }} 
+            <br>Reported by: {{ ticket.author.username }} 
+            <br>Handled by:  {{ ticket.ticket_owner.username }}
         </td>
     </tr>
 </table>

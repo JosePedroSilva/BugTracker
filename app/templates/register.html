@@ -1,20 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <ul class="nav nav-tabs">
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('settings') }}">About</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link active" href="{{ url_for('register') }}">Create New User</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link" href="#">Change Password</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-        </li>
-    </ul>
+{% include '_settingsNAV.html' %}
+
     <h1>Create new user</h1>
     <form action="" method="post">
         {{ form.hidden_tag() }}

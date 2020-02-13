@@ -25,6 +25,10 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    def created_posts(self):
+        created = Ticket.query.filter_by(user_id=self.id)
+        return created.order_by(Ticket.timestamp.desc())
+
 
 class Ticket(db.Model):
     __tablename__='tickets'

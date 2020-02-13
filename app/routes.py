@@ -57,22 +57,18 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
-
-@app.route('/mytickets/<username>')
+@app.route('/user/<username>')
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    tickets = [
-    {
-        'ref': 'BT-1',
-        'desc': 'Ticket raised #1'
-    },
-    {
-        'ref': 'BT-2',
-        'desc': "Ticket raised #2"
-    }
-    ]
-    return render_template('issues.html', user=user, tickets=tickets)
+    return render_template('user.html', user=user)
+
+@app.route('/mytickets/<username>')
+@login_required
+def mytickets_raised(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    tickets = current_user.created_posts().all()
+    return render_template('user_tickets.html', user=user, tickets=tickets)
 
 @app.route('/create', methods=['GET', 'POST'])
 @login_required
