@@ -9,9 +9,12 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    tickets = db.relationship('Ticket', backref='author', lazy='dynamic')
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
-    owner = db.relationship('Ticket', backref='owner', lazy='dynamic')
+    tickets = db.relationship('Ticket',foreign_keys='Ticket.user_id', 
+                                backref='author', lazy='dynamic') # Defines the user has the author of the issue
+    owner = db.relationship('Ticket', foreign_keys='Ticket.owner_id', 
+                                backref='ticket_owner', lazy='dynamic') # Defines the user has the person in charge/handling the issue
+    
 
     def __repr__(self):
         return f'<User {self.username}>'
@@ -23,16 +26,23 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
 
+
 class Ticket(db.Model):
     __tablename__='tickets'
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(1000))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id')) # Defines the user has the author of the issue
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id')) # Defines the user has the person in charge/handling the issue
 
     def __repr__(self):
         return f'<Ticket {self.id}: {self.description}>'
+
+    # def take_ownership(self, user):
+    #     self.owner_id.append(user)
+
+class Severity():
+    pass
 
 @login.user_loader
 def load_user(id):
