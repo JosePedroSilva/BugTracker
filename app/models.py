@@ -15,7 +15,6 @@ class User(UserMixin, db.Model):
     owner = db.relationship('Ticket', foreign_keys='Ticket.owner_id', 
                                 backref='ticket_owner', lazy='dynamic') # Defines the user has the person in charge/handling the issue
     
-
     def __repr__(self):
         return f'<User {self.username}>'
 
@@ -29,10 +28,15 @@ class User(UserMixin, db.Model):
         created = Ticket.query.filter_by(user_id=self.id)
         return created.order_by(Ticket.timestamp.desc())
 
+    def owner_posts(self):
+        owner = Ticket.query.filter_by(owner_id=self.id)
+        return owner.order_by(Ticket.timestamp.desc())
+
 
 class Ticket(db.Model):
     __tablename__='tickets'
     id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(50))
     description = db.Column(db.String(1000))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id')) # Defines the user has the author of the issue
