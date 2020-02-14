@@ -29,6 +29,19 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('Please use a different email address.')
 
 class TicketForm(FlaskForm):
+    title = TextAreaField('Title:', validators=[
+        DataRequired(), Length(min=1, max=50)
+    ])
     ticket = TextAreaField('Please describe the issue.', validators=[
-        DataRequired(), Length(min=1, max=140)])
+        DataRequired(), Length(min=1, max=1000)])
     submit = SubmitField('Submit')
+
+class ChangePassword(FlaskForm):
+    password = PasswordField('New password', validators=[DataRequired()])
+    password2 = PasswordField(
+        'Repeat Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Change password')
+
+    def __init__(self, username, *args, **kwargs):
+        super(ChangePassword, self).__init__(*args, **kwargs)
+        self.username = username

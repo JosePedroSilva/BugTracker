@@ -1,25 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Create new ticket</h1>
+{% include '_settingsNAV.html' %}
+<h1>Change Password</h1>
     <form action="" method="post">
-        <div>
         {{ form.hidden_tag() }}
         <p>
-            {{ form.title.label }}<br>
-            {{ form.title(cols=50, rows=1) }}<br>
-            {% for error in form.title.errors %}
+            {{ form.password.label }}<br>
+            {{ form.password(size=32) }}<br>
+            {% for error in form.password.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p>
-            {{ form.ticket.label }}<br>
-            {{ form.ticket(cols=100, rows=20) }}<br>
-            {% for error in form.ticket.errors %}
+            {{ form.password2.label }}<br>
+            {{ form.password2(size=32) }}<br>
+            {% for error in form.password2.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p>{{ form.submit() }}</p>
-        </div>
     </form>
 {% endblock %}

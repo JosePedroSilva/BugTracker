@@ -3,7 +3,7 @@ from flask import render_template, flash, redirect, url_for, request
 from werkzeug.urls import url_parse
 from flask_login import logout_user, login_required, current_user, login_user
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, TicketForm
+from app.forms import LoginForm, RegistrationForm, TicketForm, ChangePassword
 from app.models import User, Ticket
 
 @app.before_request
@@ -75,16 +75,29 @@ def mytickets_raised(username):
 def create():
     form = TicketForm()
     if form.validate_on_submit():
-        ticket = Ticket(description=form.ticket.data, author=current_user)
+        ticket = Ticket(description=form.ticket.data, 
+            author=current_user, title=form.title.data)
         db.session.add(ticket)
         db.session.commit()
         flash('Your ticket has been raised.')
         return redirect(url_for('index'))
     return render_template('create.html', title='Createticket', form=form)
 
-
 @app.route('/settings')
 @login_required
 def settings():
     return render_template('settings.html')
 
+@app.route('/change_password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    form = ChangePassword(current_user.username)
+    if form.validate_on_submit():
+        user = current_user
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Password changed successfully.')
+        return redirect(url_for('settings'))
+    return render_template('changePass.html', title='Change Password', form=form)
+    
