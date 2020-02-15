@@ -14,7 +14,8 @@ class User(UserMixin, db.Model):
                                 backref='author', lazy='dynamic') # Defines the user has the author of the issue
     owner = db.relationship('Ticket', foreign_keys='Ticket.owner_id', 
                                 backref='ticket_owner', lazy='dynamic') # Defines the user has the person in charge/handling the issue
-    
+    team_id = db.Column(db.Integer, db.ForeignKey('teams.id'))
+
     def __repr__(self):
         return f'<User {self.username}>'
 
@@ -36,17 +37,28 @@ class User(UserMixin, db.Model):
 class Ticket(db.Model):
     __tablename__='tickets'
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(50))
+    title = db.Column(db.String(64))
     description = db.Column(db.String(1000))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id')) # Defines the user has the author of the issue
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id')) # Defines the user has the person in charge/handling the issue
+    team_id = db.Column(db.Integer, db.ForeignKey('teams.id'))
 
     def __repr__(self):
         return f'<Ticket {self.id}: {self.description}>'
 
     # def take_ownership(self, user):
     #     self.owner_id.append(user)
+
+class Team(db.Model):
+    __tablename__='teams'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True)
+    members = db.relationship('User', backref='team_members')
+    team_tickets = db.relationship('Ticket', backref='team_tickets')
+
+    def __repr__(self):
+        return f'<Team: {self.name}'
 
 class Severity():
     pass
