@@ -39,6 +39,7 @@ class TicketForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class ChangePassword(FlaskForm):
+    #currentPassword = PasswordField('Current Password', validator=[DataRequired()])
     password = PasswordField('New password', validators=[DataRequired()])
     password2 = PasswordField(
         'Repeat Password', validators=[DataRequired(), EqualTo('password')])
@@ -47,3 +48,5 @@ class ChangePassword(FlaskForm):
     def __init__(self, username, *args, **kwargs):
         super(ChangePassword, self).__init__(*args, **kwargs)
         self.username = username
+
+

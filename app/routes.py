@@ -95,6 +95,9 @@ def change_password():
     form = ChangePassword(current_user.username)
     if form.validate_on_submit():
         user = current_user
+        # if not user.check_password(form.currentPassword.data):
+        #     flash('Invalid passsword')
+        #     return redirect('settings')
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()

@@ -3,7 +3,7 @@
         <td> <a href="#"> Ref: {{ ticket.id }} {{ ticket.title }}</a> 
             <br>{{ ticket.description }} 
             <br>
-            <br> {{ ticket.timestamp }} 
+            <br>Created: {{ moment(ticket.timestamp).fromNow() }} 
             <br>Reported by: {{ ticket.author.username }} 
             <br>Handled by:  {{ ticket.ticket_owner.username }}
         </td>
