@@ -9,3 +9,41 @@
 2020-02-15 09:27:31,514 INFO: bugTracker startup [in C:\Users\josep\OneDrive\Documents\Programming\Portfolio\bugTracker\app\__init__.py:43]
 2020-02-15 09:28:27,938 INFO: bugTracker startup [in C:\Users\josep\OneDrive\Documents\Programming\Portfolio\bugTracker\app\__init__.py:43]
 2020-02-15 09:49:14,443 INFO: bugTracker startup [in C:\Users\josep\OneDrive\Documents\Programming\Portfolio\bugTracker\app\__init__.py:43]
+2020-02-17 08:13:54,093 INFO: bugTracker startup [in C:\Users\josep\OneDrive\Documents\Programming\Portfolio\bugTracker\app\__init__.py:45]
+2020-02-17 08:14:16,059 ERROR: Exception on /create [GET] [in c:\users\josep\onedrive\documents\programming\portfolio\bugtracker\env\lib\site-packages\flask\app.py:1890]
+Traceback (most recent call last):
+  File "c:\users\josep\onedrive\documents\programming\portfolio\bugtracker\env\lib\site-packages\flask\app.py", line 2446, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\josep\onedrive\documents\programming\portfolio\bugtracker\env\lib\site-packages\flask\app.py", line 1951, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\josep\onedrive\documents\programming\portfolio\bugtracker\env\lib\site-packages\flask\app.py", line 1820, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\users\josep\onedrive\documents\programming\portfolio\bugtracker\env\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "c:\users\josep\onedrive\documents\programming\portfolio\bugtracker\env\lib\site-packages\flask\app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\josep\onedrive\documents\programming\portfolio\bugtracker\env\lib\site-packages\flask\app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "c:\users\josep\onedrive\documents\programming\portfolio\bugtracker\env\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\josep\OneDrive\Documents\Programming\Portfolio\bugTracker\app\routes.py", line 85, in create
+    return render_template('create.html', title='Createticket', form=form)
+  File "c:\users\josep\onedrive\documents\programming\portfolio\bugtracker\env\lib\site-packages\flask\templating.py", line 137, in render_template
+    return _render(
+  File "c:\users\josep\onedrive\documents\programming\portfolio\bugtracker\env\lib\site-packages\flask\templating.py", line 120, in _render
+    rv = template.render(context)
+  File "c:\users\josep\onedrive\documents\programming\portfolio\bugtracker\env\lib\site-packages\jinja2\environment.py", line 1090, in render
+    self.environment.handle_exception()
+  File "c:\users\josep\onedrive\documents\programming\portfolio\bugtracker\env\lib\site-packages\jinja2\environment.py", line 832, in handle_exception
+    reraise(*rewrite_traceback_stack(source=source))
+  File "c:\users\josep\onedrive\documents\programming\portfolio\bugtracker\env\lib\site-packages\jinja2\_compat.py", line 28, in reraise
+    raise value.with_traceback(tb)
+  File "C:\Users\josep\OneDrive\Documents\Programming\Portfolio\bugTracker\app\templates\create.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "C:\Users\josep\OneDrive\Documents\Programming\Portfolio\bugTracker\app\templates\base.html", line 53, in top-level template code
+    {% block content %}{% endblock %}
+  File "C:\Users\josep\OneDrive\Documents\Programming\Portfolio\bugTracker\app\templates\create.html", line 7, in block "content"
+    {{ wtf.quick_form(form) }}
+  File "c:\users\josep\onedrive\documents\programming\portfolio\bugtracker\env\lib\site-packages\jinja2\environment.py", line 471, in getattr
+    return getattr(obj, attribute)
+jinja2.exceptions.UndefinedError: 'wtf' is undefined
