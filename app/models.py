@@ -58,7 +58,7 @@ class Team(db.Model):
     team_tickets = db.relationship('Ticket', backref='team_tickets')
 
     def __repr__(self):
-        return f'<Team: {self.name}'
+        return f'{self.name}'
 
 class Severity():
     pass

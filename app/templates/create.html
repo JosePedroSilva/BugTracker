@@ -1,11 +1,25 @@
 {% extends "base.html" %}
-{% import 'bootstrap/wtf.html' as wtf %}
 
 {% block content %}
     <h1>Create new ticket</h1>
-    <div class="row">
-        <div class="col-md-4">
-            {{ wtf.quick_form(form) }}
+    <form action="" method="post">
+        <div>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.title.label }}<br>
+            {{ form.title(cols=50, rows=1) }}<br>
+            {% for error in form.title.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.ticket.label }}<br>
+            {{ form.ticket(cols=100, rows=20) }}<br>
+            {% for error in form.ticket.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
         </div>
-    </div>
+    </form>
 {% endblock %}

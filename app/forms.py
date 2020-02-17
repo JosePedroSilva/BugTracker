@@ -1,8 +1,11 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
+from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from app.models import User, Team
 
+def team_choice():
+    return Team.query.filter_by()
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -13,7 +16,9 @@ class LoginForm(FlaskForm):
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    #team = SelectField('Team', coerce=int)
+    team = QuerySelectField('Team:', 
+                                query_factory=team_choice, get_label='name',
+                                allow_blank=False)
     password = PasswordField('Password', validators=[DataRequired()])
     password2 = PasswordField(
         'Repeat Password', validators=[DataRequired(), EqualTo('password')])
