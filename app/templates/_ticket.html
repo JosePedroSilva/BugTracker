@@ -1,11 +1,20 @@
 <table class="table table-striped">
     <tr valign="top">
         <td> <a href="#"> Ref: {{ ticket.id }} {{ ticket.title }}</a> 
-            <br>{{ ticket.description }} 
             <br>
-            <br>Created: {{ moment(ticket.timestamp).fromNow() }} 
+            {% if ticket.description|length < 20 %}
+            <br>{{ ticket.description }} 
+            {% else %}
+            <br>Description: 
+            <br> {{ ticket.description[0:100] }} (...)
+            {% endif %}
+            <p class="tickets_meta" ><br>Created: {{ moment(ticket.timestamp).fromNow() }} 
             <br>Reported by: {{ ticket.author.username }} 
             <br>Handled by:  {{ ticket.ticket_owner.username }}
+            <br>Team: {{ ticket.team_tickets.name }}
+            <br>Priority: {{ ticket.ticket_severity.degree }}</p>
         </td>
     </tr>
 </table>
+
+

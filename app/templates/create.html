@@ -13,6 +13,22 @@
             {% endfor %}
         </p>
         <p>
+            {{ form.csrf_token }}
+            {{ form.severity.label }}<br>
+            {{ form.severity }}<br>
+            {% for error in form.severity.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.csrf_token }}
+            {{ form.team.label }}<br>
+            {{ form.team }}<br>
+            {% for error in form.team.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
             {{ form.ticket.label }}<br>
             {{ form.ticket(cols=100, rows=20) }}<br>
             {% for error in form.ticket.errors %}

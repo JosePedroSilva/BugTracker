@@ -76,8 +76,12 @@ def mytickets_raised(username):
 def create():
     form = TicketForm()
     if form.validate_on_submit():
-        ticket = Ticket(description=form.ticket.data, 
-            author=current_user, title=form.title.data)
+        ticket = Ticket(
+            description=form.ticket.data, 
+            author=current_user, 
+            title=form.title.data,
+            team_id=form.team.data.id, 
+            severity_id=form.severity.data.id)
         db.session.add(ticket)
         db.session.commit()
         flash('Your ticket has been raised.')

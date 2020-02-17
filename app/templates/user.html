@@ -4,10 +4,10 @@
 
 {% include '_myTicketsNav.html' %}
 
-    <table>
-        <tr valign="top">
-            <td><h1>User: {{ user.username }}</h1></td>
-        </tr>
-    </table>
+<h1>User: {{ user.username }}</h1>
+
+<h3>Team: {{ user.team_members.name }} </h3>
+
+    
 
 {% endblock %}

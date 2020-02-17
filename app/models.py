@@ -43,6 +43,7 @@ class Ticket(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id')) # Defines the user has the author of the issue
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id')) # Defines the user has the person in charge/handling the issue
     team_id = db.Column(db.Integer, db.ForeignKey('teams.id'))
+    severity_id = db.Column(db.Integer, db.ForeignKey('severity.id'))
 
     def __repr__(self):
         return f'<Ticket {self.id}: {self.description}>'
@@ -60,8 +61,14 @@ class Team(db.Model):
     def __repr__(self):
         return f'{self.name}'
 
-class Severity():
-    pass
+class Severity(db.Model):
+    __tablename__='severity'
+    id = db.Column(db.Integer, primary_key=True)
+    degree = db.Column(db.String(32), unique=True)
+    tickets_sev = db.relationship('Ticket', backref='ticket_severity')
+    
+    def __repr__(self):
+        return f'{self.degree}'
 
 @login.user_loader
 def load_user(id):
