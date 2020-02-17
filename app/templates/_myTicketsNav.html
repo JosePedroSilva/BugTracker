@@ -1,21 +1,30 @@
 <ul class="nav nav-tabs">
-    <li class="nav-item">
-      <a class="nav-link active" href="{{ url_for('user', username=current_user.username) }}">User</a>
-    </li>
-    <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Tickets</a>
-      <div class="dropdown-menu">
-        <a class="dropdown-item" href="{{ url_for('mytickets_raised', username=current_user.username) }}">Raised</a>
-        <a class="dropdown-item" href="#">Handling</a>
-        <a class="dropdown-item" href="#">Something else here</a>
-        <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="#">Separated link</a>
-      </div>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#">Link</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-    </li>
+  <li class="nav-item">
+    {% if title == 'userTicketsStats' %}
+      <a class="nav-link active" href="{{ url_for('user', username=current_user.username) }}">Stats</a>
+    {% else %}
+      <a class="nav-link" href="{{ url_for('user', username=current_user.username) }}">Stats</a>
+    {% endif %}
+  </li>
+  <li class="nav-item">
+    {% if title == 'mytickets' %}
+      <a class="nav-link active" href="{{ url_for('mytickets_raised', username=current_user.username) }}">My Tickets</a>
+    {% else %}
+      <a class="nav-link" href="{{ url_for('mytickets_raised', username=current_user.username) }}">My Tickets</a>
+    {% endif %}
+  </li>
+  <li class="nav-item">
+    {% if title == '#' %}
+      <a class="nav-link active" href="#">In Progress</a>
+    {% else %}
+      <a class="nav-link" href="#">In Progress</a>
+    {% endif %}
+  </li>
+  <li class="nav-item">
+    {% if title == 'Change Password' %}
+      <a class="nav-link disabled" href="#">My Team Issues</a>
+    {% else %}
+      <a class="nav-link disabled" href="#">My Team Issues</a>
+    {% endif %}
+  </li>
 </ul>

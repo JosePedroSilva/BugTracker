@@ -1,14 +1,30 @@
 <ul class="nav nav-tabs">
     <li class="nav-item">
-      <a class="nav-link active" href="{{ url_for('settings') }}">About</a>
+      {% if title == 'settings' %}
+        <a class="nav-link active" href="{{ url_for('settings') }}">About</a>
+      {% else %}
+        <a class="nav-link" href="{{ url_for('settings') }}">About</a>
+      {% endif %}
+    </li>
+    
+    <li class="nav-item">
+      {% if title == 'Register' %}
+        <a class="nav-link active" href="{{ url_for('register') }}">Create New User</a>
+      {% else %}
+        <a class="nav-link" href="{{ url_for('register') }}">Create New User</a>
+      {% endif %}
+    </li>
+
+    <li class="nav-item">
+      {% if title == 'Change Password' %}
+        <a class="nav-link active" href="{{ url_for('change_password') }}">Change Password</a>
+      {% else %}
+        <a class="nav-link" href="{{ url_for('change_password') }}">Change Password</a>
+        {% endif %}
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="{{ url_for('register') }}">Create New User</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{{ url_for('change_password') }}">Change Password</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+      <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Change User Profile</a>
     </li>
 </ul>
+
+

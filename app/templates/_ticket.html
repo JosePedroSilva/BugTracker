@@ -1,20 +1,30 @@
 <table class="table table-striped">
     <tr valign="top">
-        <td> <a href="#"> Ref: {{ ticket.id }} {{ ticket.title }}</a> 
-            <br>
+        <td> <a href="#"><h5 class="ticket_reference">Ref:{{ ticket.id }} {{ ticket.title }} </h5></a> 
             {% if ticket.description|length < 20 %}
-            <br>{{ ticket.description }} 
+                {{ ticket.description }} 
             {% else %}
-            <br>Description: 
-            <br> {{ ticket.description[0:100] }} (...)
+                <b>Description: </b>
+                <br> {{ ticket.description[0:100] }} (...)
             {% endif %}
-            <p class="tickets_meta" ><br>Created: {{ moment(ticket.timestamp).fromNow() }} 
+            <p class="tickets_meta" >
+            {% if ticket.ticket_severity.degree == 'low' %}
+                <br>Priority: <span style="color: #3CD448;">{{ ticket.ticket_severity.degree }}</span>
+            {% elif ticket.ticket_severity.degree == 'medium' %}
+                <br>Priority: <span style="color: #B1E001;">{{ ticket.ticket_severity.degree }}</span>
+            {% elif ticket.ticket_severity.degree == 'high' %}
+                <br>Priority: <span style="color: rgb(238, 200, 8);">{{ ticket.ticket_severity.degree }}</span>
+            {% else %}
+                <br>Priority: <span style="color: #DD0A08;">{{ ticket.ticket_severity.degree }}</span>
+            {% endif %}
+            <br>Created: {{ moment(ticket.timestamp).fromNow() }} 
             <br>Reported by: {{ ticket.author.username }} 
             <br>Handled by:  {{ ticket.ticket_owner.username }}
-            <br>Team: {{ ticket.team_tickets.name }}
-            <br>Priority: {{ ticket.ticket_severity.degree }}</p>
+            <br>Team: {{ ticket.team_tickets.name }} <br></p>
         </td>
     </tr>
 </table>
+
+
 
 

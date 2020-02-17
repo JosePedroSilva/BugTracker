@@ -44,6 +44,7 @@ class Ticket(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id')) # Defines the user has the person in charge/handling the issue
     team_id = db.Column(db.Integer, db.ForeignKey('teams.id'))
     severity_id = db.Column(db.Integer, db.ForeignKey('severity.id'))
+    status_id = db.Column(db.Integer, db.ForeignKey('status.id'))
 
     def __repr__(self):
         return f'<Ticket {self.id}: {self.description}>'
@@ -69,6 +70,15 @@ class Severity(db.Model):
     
     def __repr__(self):
         return f'{self.degree}'
+
+class Status(db.Model):
+    __tablename__='status'
+    id = db.Column(db.Integer, primary_key=True)
+    status = db.Column(db.String(32), unique=True)
+    tickets_status = db.relationship('Ticket', backref='ticket_status')
+
+    def __repr__(self):
+        return f'{self.status}'
 
 @login.user_loader
 def load_user(id):

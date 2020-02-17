@@ -20,5 +20,10 @@
 
 .tickets_meta{
   opacity: 0.6;
-  padding-left: 5%
+  padding-left: 5%;
+  font-size: 0.8em;
+}
+
+.ticket_reference{
+  margin-bottom: 15px;
 }

@@ -62,14 +62,14 @@ def register():
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    return render_template('user.html', user=user)
+    return render_template('user.html', user=user, title='userTicketsStats')
 
 @app.route('/mytickets/<username>')
 @login_required
 def mytickets_raised(username):
     user = User.query.filter_by(username=username).first_or_404()
     tickets = current_user.created_posts().all()
-    return render_template('user_tickets.html', user=user, tickets=tickets)
+    return render_template('user_tickets.html', title='mytickets', user=user, tickets=tickets)
 
 @app.route('/create', methods=['GET', 'POST'])
 @login_required
@@ -91,7 +91,7 @@ def create():
 @app.route('/settings')
 @login_required
 def settings():
-    return render_template('settings.html')
+    return render_template('settings.html', title='settings')
 
 @app.route('/change_password', methods=['GET', 'POST'])
 @login_required
