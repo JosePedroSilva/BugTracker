@@ -1,8 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
+    
     <h1>Hi, {{ current_user.username }}!</h1>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+        {% if prev_url %}
+            <li class="page-item"><a class="page-link" href="{{ prev_url }}">Previous</a></li>
+        {% endif %}
+        {% if next_url %}
+            <li class="page-item"><a class="page-link" href="{{ next_url }}">Next</a></li>
+    </nav>
+        {% endif %}
         {% for ticket in tickets %}
             {% include '_ticket.html' %}
         {% endfor %}
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+            {% if prev_url %}
+                <li class="page-item"><a class="page-link" href="{{ prev_url }}">Previous</a></li>
+            {% endif %}
+            {% if next_url %}
+                <li class="page-item"><a class="page-link" href="{{ next_url }}">Next</a></li>
+            {% endif %}
+        </nav>
 {% endblock %}

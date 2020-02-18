@@ -48,3 +48,5 @@ Traceback (most recent call last):
     return getattr(obj, attribute)
 jinja2.exceptions.UndefinedError: 'wtf' is undefined
 2020-02-17 13:48:57,520 INFO: bugTracker startup [in C:\Users\josep\OneDrive\Documents\Programming\Portfolio\bugTracker\app\__init__.py:45]
+2020-02-18 11:10:30,770 INFO: bugTracker startup [in c:\Users\josep\OneDrive\Documents\Programming\Portfolio\bugTracker\app\__init__.py:45]
+2020-02-18 11:12:25,599 INFO: bugTracker startup [in c:\Users\josep\OneDrive\Documents\Programming\Portfolio\bugTracker\app\__init__.py:45]

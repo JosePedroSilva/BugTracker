@@ -12,12 +12,20 @@ def before_request():
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
 
-@app.route('/')
-@app.route('/index')
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
-    tickets = Ticket.query.order_by(Ticket.timestamp.desc()).all()
-    return render_template('index.html', title='HomePage', tickets=tickets)
+    page = request.args.get('page', 1, type=int)
+    tickets = Ticket.query.order_by(Ticket.timestamp.desc()).paginate(
+        page, app.config['TICKETS_PER_PAGE'], False)
+    next_url = url_for('index', page=tickets.next_num) \
+        if tickets.has_next else None
+    prev_url = url_for('index', page=tickets.prev_num) \
+        if tickets.has_prev else None
+    return render_template('index.html', title='HomePage', 
+                            tickets=tickets.items, next_url=next_url,
+                           prev_url=prev_url)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -58,11 +66,13 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
-@app.route('/user/<username>')
+@app.route('/user_ticket_stats/<username>')
 @login_required
-def user(username):
+def user_ticket_stats(username):
     user = User.query.filter_by(username=username).first_or_404()
-    return render_template('user.html', user=user, title='userTicketsStats')
+    team_elements = User.query.filter_by(team_id=current_user.team_id).all()
+    return render_template('user.html', user=user, title='userTicketStats', 
+                            team_elements=team_elements)
 
 @app.route('/mytickets/<username>')
 @login_required

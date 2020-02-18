@@ -7,7 +7,9 @@
 <h1>User: {{ user.username }}</h1>
 
 <h3>Team: {{ user.team_members.name }} </h3>
-
-    
-
+<p>
+{% for u in team_elements %}
+{{ u.username }} <br>
+{% endfor %}
+</p>
 {% endblock %}

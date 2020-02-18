@@ -5,21 +5,27 @@ from app import db
 from app.models import User, Ticket
 
 def users(count=30):
+    """
+        Populates the db with fake users
+    """
     fake = Faker()
     i = 0
     while i < count:
         u = User(
             username=fake.user_name(),
-            password_hash='password',
             email=fake.email(),
             last_seen=fake.past_date(),
-            team_id=1)
+            team_id=randint(1,4))
+        u.set_password('password')
         db.session.add(u)
         db.session.commit()
         i += 1
 
 
 def tickets(count=100):
+    """
+        Populates the db with fake tickets
+    """
     fake = Faker()
     user_count = User.query.count()
     for i in range(count):

@@ -1,9 +1,9 @@
 <ul class="nav nav-tabs">
   <li class="nav-item">
-    {% if title == 'userTicketsStats' %}
-      <a class="nav-link active" href="{{ url_for('user', username=current_user.username) }}">Stats</a>
+    {% if title == 'userTicketStats' %}
+      <a class="nav-link active" href="{{ url_for('user_ticket_stats', username=current_user.username) }}">Stats</a>
     {% else %}
-      <a class="nav-link" href="{{ url_for('user', username=current_user.username) }}">Stats</a>
+      <a class="nav-link" href="{{ url_for('user_ticket_stats', username=current_user.username) }}">Stats</a>
     {% endif %}
   </li>
   <li class="nav-item">
