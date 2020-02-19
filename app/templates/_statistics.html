@@ -1,0 +1,62 @@
+<h3>Total of tickets: {{ tickets_total }} <br> </h3>
+
+
+<h4>Number of tickets per status</h4>
+<table class="table table-hover table-sm">
+<thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      {% for k in tickets_per_status.keys() %}
+      <th scope="col">{{ k }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">Nº of tickets</th>
+      {% for v in tickets_per_status.values() %}
+      <th scope="row">{{ v }}</th>
+      {% endfor %}
+    </tr>
+  </tbody>
+</table>
+
+<h4>Number of tickets per priority</h4>
+<table class="table table-hover table-sm">
+    <thead class="thead-dark">
+        <tr>
+          <th scope="col">#</th>
+          {% for k in tickets_per_sev.keys() %}
+          <th scope="col">{{ k }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Nº of tickets</th>
+          {% for v in tickets_per_sev.values() %}
+          <th scope="row">{{ v }}</th>
+          {% endfor %}
+        </tr>
+      </tbody>
+    </table>
+
+<h4>Number of tickets per team</h4>
+<table class="table table-hover table-sm">
+    <thead class="thead-dark">
+        <tr>
+        <th scope="col">#</th>
+        {% for k in tickets_per_team.keys() %}
+        <th scope="col">{{ k }}</th>
+        {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+        <th scope="row">Nº of tickets</th>
+        {% for v in tickets_per_team.values() %}
+        <th scope="row">{{ v }}</th>
+        {% endfor %}
+        </tr>
+    </tbody>
+</table>

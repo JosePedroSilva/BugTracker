@@ -10,9 +10,9 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
-    tickets = db.relationship('Ticket',foreign_keys='Ticket.user_id', 
+    tickets = db.relationship('Ticket',foreign_keys='Ticket.user_id',
                                 backref='author', lazy='dynamic') # Defines the user has the author of the issue
-    owner = db.relationship('Ticket', foreign_keys='Ticket.owner_id', 
+    owner = db.relationship('Ticket', foreign_keys='Ticket.owner_id',
                                 backref='ticket_owner', lazy='dynamic') # Defines the user has the person in charge/handling the issue
     team_id = db.Column(db.Integer, db.ForeignKey('teams.id'))
 
@@ -37,7 +37,7 @@ class User(UserMixin, db.Model):
         count = Ticket.query.filter_by(user_id=self.id).count()
         return count
 
-    
+
 
 
 class Ticket(db.Model):
@@ -58,11 +58,24 @@ class Ticket(db.Model):
     def count_total():
         total = Ticket.query.count()
         return total
-    
-    def count_per_team(team_id):
-        team_total = Ticket.query.filter_by(team_id=team_id).count()
+
+    def count_per_team():
+        team_total = {Team.query.filter_by(id=t).value(Team.name):
+                        Ticket.query.filter_by(team_id=t).count()
+                        for t in range(1, Team.query.count()+1)}
         return team_total
 
+    def count_per_status():
+        status_count = {Status.query.filter_by(id=s).value(Status.status):
+                        Ticket.query.filter_by(status_id=s).count()
+                        for s in range(1, Status.query.count()+1)}
+        return status_count
+
+    def count_per_severity():
+        sev_count = {Severity.query.filter_by(id=s).value(Severity.degree):
+                        Ticket.query.filter_by(severity_id=s).count()
+                        for s in range(1, Severity.query.count()+1)}
+        return sev_count
 
 class Team(db.Model):
     __tablename__='teams'
@@ -79,7 +92,7 @@ class Severity(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     degree = db.Column(db.String(32), unique=True)
     tickets_sev = db.relationship('Ticket', backref='ticket_severity')
-    
+
     def __repr__(self):
         return f'{self.degree}'
 

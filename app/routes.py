@@ -16,6 +16,10 @@ def before_request():
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
+    tickets_total = Ticket.count_total()
+    tickets_per_team = Ticket.count_per_team()
+    tickets_per_status = Ticket.count_per_status()
+    tickets_per_sev = Ticket.count_per_severity()
     page = request.args.get('page', 1, type=int)
     tickets = Ticket.query.order_by(Ticket.timestamp.desc()).paginate(
         page, app.config['TICKETS_PER_PAGE'], False)
@@ -25,7 +29,9 @@ def index():
         if tickets.has_prev else None
     return render_template('index.html', title='HomePage', 
                             tickets=tickets.items, next_url=next_url,
-                           prev_url=prev_url)
+                           prev_url=prev_url, tickets_per_team=tickets_per_team,
+                           tickets_total=tickets_total, tickets_per_status=tickets_per_status,
+                           tickets_per_sev=tickets_per_sev)
 
 
 @app.route('/login', methods=['GET', 'POST'])
