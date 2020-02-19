@@ -25,13 +25,19 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    def created_posts(self):
+    def created_tickets(self):
         created = Ticket.query.filter_by(user_id=self.id)
         return created.order_by(Ticket.timestamp.desc())
 
-    def owner_posts(self):
+    def owner_tickets(self):
         owner = Ticket.query.filter_by(owner_id=self.id)
         return owner.order_by(Ticket.timestamp.desc())
+
+    def created_count(self):
+        count = Ticket.query.filter_by(user_id=self.id).count()
+        return count
+
+    
 
 
 class Ticket(db.Model):
@@ -49,8 +55,14 @@ class Ticket(db.Model):
     def __repr__(self):
         return f'<Ticket {self.id}: {self.description}>'
 
-    # def take_ownership(self, user):
-    #     self.owner_id.append(user)
+    def count_total():
+        total = Ticket.query.count()
+        return total
+    
+    def count_per_team(team_id):
+        team_total = Ticket.query.filter_by(team_id=team_id).count()
+        return team_total
+
 
 class Team(db.Model):
     __tablename__='teams'

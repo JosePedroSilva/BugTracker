@@ -77,9 +77,19 @@ def user_ticket_stats(username):
 @app.route('/mytickets/<username>')
 @login_required
 def mytickets_raised(username):
+    page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
-    tickets = current_user.created_posts().all()
-    return render_template('user_tickets.html', title='mytickets', user=user, tickets=tickets)
+    tickets = current_user.created_tickets().paginate(
+        page, app.config['TICKETS_PER_PAGE'], False)
+    created_count = current_user.created_count()
+    next_url = url_for('mytickets_raised', page=tickets.next_num, username=username) \
+        if tickets.has_next else None
+    prev_url = url_for('mytickets_raised', page=tickets.prev_num, username=username) \
+        if tickets.has_prev else None
+    return render_template('user_tickets.html', title='mytickets', 
+                            user=user, tickets=tickets.items, 
+                            created_count=created_count, next_url=next_url,
+                           prev_url=prev_url)
 
 @app.route('/create', methods=['GET', 'POST'])
 @login_required
