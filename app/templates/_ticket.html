@@ -1,6 +1,6 @@
 <table class="table table-striped">
     <tr valign="top">
-        <td> <a href="#"><h5 class="ticket_reference">Ref:{{ ticket.id }} {{ ticket.title }} </h5></a> 
+        <td> <a href="{{ url_for('ticket_view', id=ticket.id) }}"><h5 class="ticket_reference">Ref:{{ ticket.id }} {{ ticket.title }} </h5></a> 
             {% if ticket.description|length < 20 %}
                 {{ ticket.description }} 
             {% else %}
@@ -24,6 +24,9 @@
         </td>
     </tr>
 </table>
+
+
+
 
 
 

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>Ref: {{ ticket.id }}</h3>
+<h1>{{ ticket.title }}</h1>
+
+<p class="tickets_meta" >
+    {% if ticket.ticket_severity.degree == 'low' %}
+        <br>Priority: <span style="color: #3CD448;">{{ ticket.ticket_severity.degree }}</span>
+    {% elif ticket.ticket_severity.degree == 'medium' %}
+        <br>Priority: <span style="color: #B1E001;">{{ ticket.ticket_severity.degree }}</span>
+    {% elif ticket.ticket_severity.degree == 'high' %}
+        <br>Priority: <span style="color: rgb(238, 200, 8);">{{ ticket.ticket_severity.degree }}</span>
+    {% else %}
+        <br>Priority: <span style="color: #DD0A08;">{{ ticket.ticket_severity.degree }}</span>
+    {% endif %}
+    <br>Status: {{ (ticket.ticket_status.status)}}
+    <br>Created: {{ moment(ticket.timestamp).fromNow() }} 
+    <br>Reported by: {{ ticket.author.username }} 
+    <br>Handled by:  {{ ticket.ticket_owner.username }}
+    <br>Team: {{ ticket.team_tickets.name }} <br></p>
+
+<p> <br>Description: <br> {{ ticket.description }}</p>
+
+
+
+{% endblock %}

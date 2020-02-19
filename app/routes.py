@@ -91,7 +91,8 @@ def create():
             author=current_user, 
             title=form.title.data,
             team_id=form.team.data.id, 
-            severity_id=form.severity.data.id)
+            severity_id=form.severity.data.id,
+            status_id=1)
         db.session.add(ticket)
         db.session.commit()
         flash('Your ticket has been raised.')
@@ -118,4 +119,10 @@ def change_password():
         flash('Password changed successfully.')
         return redirect(url_for('settings'))
     return render_template('changePass.html', title='Change Password', form=form)
+
+@app.route('/ticket/<id>', methods=['GET', 'POST'])
+@login_required
+def ticket_view(id):
+    ticket = Ticket.query.filter_by(id=id).first_or_404()
+    return render_template('ticket.html', ticket=ticket, title='ticket')
     
