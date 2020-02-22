@@ -3,7 +3,7 @@
 {% block content %}
     
     <h1>Hi, {{ current_user.username }}!</h1>
-    {% include '_statistics.html' %}
+
         {% for ticket in tickets %}
             {% include '_ticket.html' %}
         {% endfor %}

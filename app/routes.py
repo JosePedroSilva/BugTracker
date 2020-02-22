@@ -2,6 +2,8 @@ from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request
 from werkzeug.urls import url_parse
 from flask_login import logout_user, login_required, current_user, login_user
+import pygal
+from pygal.style import CleanStyle
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, TicketForm, ChangePassword
 from app.models import User, Ticket, Team
@@ -16,10 +18,6 @@ def before_request():
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
-    tickets_total = Ticket.count_total()
-    tickets_per_team = Ticket.count_per_team()
-    tickets_per_status = Ticket.count_per_status()
-    tickets_per_sev = Ticket.count_per_severity()
     page = request.args.get('page', 1, type=int)
     tickets = Ticket.query.order_by(Ticket.timestamp.desc()).paginate(
         page, app.config['TICKETS_PER_PAGE'], False)
@@ -29,9 +27,7 @@ def index():
         if tickets.has_prev else None
     return render_template('index.html', title='HomePage', 
                             tickets=tickets.items, next_url=next_url,
-                           prev_url=prev_url, tickets_per_team=tickets_per_team,
-                           tickets_total=tickets_total, tickets_per_status=tickets_per_status,
-                           tickets_per_sev=tickets_per_sev)
+                           prev_url=prev_url)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -142,3 +138,33 @@ def ticket_view(id):
     ticket = Ticket.query.filter_by(id=id).first_or_404()
     return render_template('ticket.html', ticket=ticket, title='ticket')
     
+
+@app.route('/admin_overview')
+@login_required
+def overview():
+    tickets_total = Ticket.count_total()
+    tickets_per_team = Ticket.count_per_team()
+    tickets_per_status = Ticket.count_per_status()
+    tickets_per_sev = Ticket.count_per_severity()
+    team_chart = pygal.Pie(style=CleanStyle)
+    team_chart.title = 'Team count'
+    for k,v in tickets_per_team.items():
+        team_chart.add(k, v)
+    team_chart = team_chart.render_data_uri()
+    status_chart = pygal.Pie(half_pie=True, style=CleanStyle)
+    status_chart.title = 'Status count'
+    for k,v in tickets_per_status.items():
+        status_chart.add(k,v)
+    status_chart = status_chart.render_data_uri()
+    severity_chart = pygal.Pie()
+    severity_chart.title = 'Priority count'
+    for k,v in tickets_per_sev.items():
+        severity_chart.add(k,v)
+    severity_chart = severity_chart.render_data_uri()
+    return render_template('overview.html', title='Overview', 
+                            tickets_per_team=tickets_per_team,
+                           tickets_total=tickets_total, tickets_per_status=tickets_per_status,
+                           tickets_per_sev=tickets_per_sev, team_chart=team_chart,
+                           status_chart=status_chart, severity_chart=severity_chart)
+
+

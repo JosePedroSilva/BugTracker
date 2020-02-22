@@ -25,10 +25,11 @@
                 <li class="nav-item active">
                   <a class="nav-link" href="{{ url_for('user_ticket_stats', username=current_user.username) }}">My Tickets<span class="sr-only">(current)</span></a>
                 </li>
-                  <a class="nav-link" href="#">Link</a>
-                </li>
                 <li class="nav-item">
                   <a class="nav-link" href="{{ url_for('settings') }}">Options</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('overview') }}">Admin</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>

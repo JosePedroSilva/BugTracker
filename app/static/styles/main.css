@@ -27,3 +27,12 @@
 .ticket_reference{
   margin-bottom: 15px;
 }
+
+.Stats{
+  padding: 10%;
+}
+
+#chart{
+  max-width: 600px;
+  align-content: center;
+}

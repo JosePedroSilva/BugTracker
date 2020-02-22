@@ -1,0 +1,37 @@
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+      {% if title == 'Overview' %}
+        <a class="nav-link active" href="{{ url_for('overview') }}">Overview</a>
+      {% else %}
+        <a class="nav-link" href="{{ url_for('overview') }}">Overview</a>
+      {% endif %}
+    </li>
+    
+    <li class="nav-item">
+      {% if title == 'Register' %}
+        <a class="nav-link active" href="{{ url_for('register') }}">Create New User</a>
+      {% else %}
+        <a class="nav-link" href="{{ url_for('register') }}">Create New User</a>
+      {% endif %}
+    </li>
+
+    <li class="nav-item">
+      {% if title == 'Change Password' %}
+        <a class="nav-link active" href="#">Change User Profile</a>
+      {% else %}
+        <a class="nav-link" href="#">Change User Profile</a>
+        {% endif %}
+    </li>
+
+    <li class="nav-item">
+      {% if title == 'Change Password' %}
+        <a class="nav-link active" href="#">All tickets</a>
+      {% else %}
+        <a class="nav-link" href="#">All tickets</a>
+        {% endif %}
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">nothin</a>
+    </li>
+</ul>
