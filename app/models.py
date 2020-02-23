@@ -77,6 +77,9 @@ class Ticket(db.Model):
                         for s in range(1, Severity.query.count()+1)}
         return sev_count
 
+class Role():
+    pass
+
 class Team(db.Model):
     __tablename__='teams'
     id = db.Column(db.Integer, primary_key=True)

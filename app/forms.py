@@ -10,6 +10,9 @@ def team_choice():
 def severity_choice():
     return Severity.query
 
+def user_choice():
+    return User.query
+
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -63,4 +66,11 @@ class ChangePassword(FlaskForm):
         super(ChangePassword, self).__init__(*args, **kwargs)
         self.username = username
 
+class TakeOwnership(FlaskForm):
+    userField = QuerySelectField('Owner:',
+                                    query_factory=user_choice, get_label='username')
+    
+    # def __init__(self, username, *args, **kwargs):
+    #     super(TakeOwnership, self).__init__(*args, **kwargs)
+    #     self.username = username
 

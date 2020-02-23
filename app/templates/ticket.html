@@ -4,7 +4,14 @@
 
 <h3>Ref: {{ ticket.id }}</h3>
 <h1>{{ ticket.title }}</h1>
-
+<p>
+    {{ form.csrf_token }}
+    {{ form.team.label }}<br>
+    {{ form.team }}<br>
+    {% for error in form.team.errors %}
+    <span style="color: red;">[{{ error }}]</span>
+    {% endfor %}
+</p>
 <p class="tickets_meta" >
     {% if ticket.ticket_severity.degree == 'low' %}
         <br>Priority: <span style="color: #3CD448;">{{ ticket.ticket_severity.degree }}</span>
