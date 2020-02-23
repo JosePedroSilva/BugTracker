@@ -66,9 +66,9 @@ class ChangePassword(FlaskForm):
         super(ChangePassword, self).__init__(*args, **kwargs)
         self.username = username
 
-class TakeOwnership(FlaskForm):
-    userField = QuerySelectField('Owner:',
-                                    query_factory=user_choice, get_label='username')
+# class TakeOwnership(FlaskForm):
+#     userField = QuerySelectField('Owner:',
+#                                     query_factory=user_choice, get_label='username')
     
     # def __init__(self, username, *args, **kwargs):
     #     super(TakeOwnership, self).__init__(*args, **kwargs)

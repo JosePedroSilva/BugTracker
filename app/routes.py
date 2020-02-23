@@ -5,7 +5,7 @@ from flask_login import logout_user, login_required, current_user, login_user
 import pygal
 from pygal.style import CleanStyle
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, TicketForm, ChangePassword, TakeOwnership
+from app.forms import LoginForm, RegistrationForm, TicketForm, ChangePassword
 from app.models import User, Ticket, Team
 
 @app.before_request
@@ -135,10 +135,10 @@ def change_password():
 @app.route('/ticket/<id>', methods=['GET', 'POST'])
 @login_required
 def ticket_view(id):
-    form = TakeOwnership()
+    #form = TakeOwnership()
 
     ticket = Ticket.query.filter_by(id=id).first_or_404()
-    return render_template('ticket.html', ticket=ticket, title='ticket', form=form)
+    return render_template('ticket.html', ticket=ticket, title='ticket')
     
 
 @app.route('/admin_overview')
