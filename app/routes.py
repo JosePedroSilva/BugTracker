@@ -180,9 +180,21 @@ def register():
         db.session.add(user)
         db.session.commit() 
         flash(f'User: {form.username.data} created!')
-        return redirect(url_for('login'))
+        return redirect(url_for('register'))
     return render_template('register.html', title='Register', form=form)
 
 
-
+@app.route('/all_tickets', methods=['GET', 'POST'])
+@login_required
+def all_tickets():
+    page = request.args.get('page', 1, type=int)
+    tickets = Ticket.query.order_by(Ticket.timestamp.desc()).paginate(
+        page, app.config['TICKETS_PER_PAGE'], False)
+    next_url = url_for('all_tickets', page=tickets.next_num) \
+        if tickets.has_next else None
+    prev_url = url_for('all_tickets', page=tickets.prev_num) \
+        if tickets.has_prev else None
+    return render_template('allTickets.html', title='AllTickets', 
+                            tickets=tickets.items, next_url=next_url,
+                           prev_url=prev_url)
 

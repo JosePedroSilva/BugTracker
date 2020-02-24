@@ -24,10 +24,10 @@
     </li>
 
     <li class="nav-item">
-      {% if title == 'Change Password' %}
-        <a class="nav-link active" href="#">All tickets</a>
+      {% if title == 'AllTickets' %}
+        <a class="nav-link active" href="{{ url_for('all_tickets') }}">All tickets</a>
       {% else %}
-        <a class="nav-link" href="#">All tickets</a>
+        <a class="nav-link" href="{{ url_for('all_tickets') }}">All tickets</a>
         {% endif %}
     </li>
 
