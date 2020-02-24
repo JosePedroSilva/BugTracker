@@ -54,3 +54,5 @@ jinja2.exceptions.UndefinedError: 'wtf' is undefined
 2020-02-19 17:59:06,272 INFO: bugTracker startup [in C:\Users\josep\OneDrive\Documents\Programming\Portfolio\bugTracker\app\__init__.py:45]
 2020-02-19 17:59:42,029 INFO: bugTracker startup [in C:\Users\josep\OneDrive\Documents\Programming\Portfolio\bugTracker\app\__init__.py:45]
 2020-02-22 08:09:24,683 INFO: bugTracker startup [in C:\Users\josep\OneDrive\Documents\Programming\Portfolio\bugTracker\app\__init__.py:45]
+2020-02-24 09:35:10,797 INFO: bugTracker startup [in C:\Users\josep\OneDrive\Documents\Programming\Portfolio\bugTracker\app\__init__.py:45]
+2020-02-24 09:35:47,880 INFO: bugTracker startup [in C:\Users\josep\OneDrive\Documents\Programming\Portfolio\bugTracker\app\__init__.py:45]

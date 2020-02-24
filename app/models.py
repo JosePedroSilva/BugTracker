@@ -18,6 +18,11 @@ class User(UserMixin, db.Model):
     team_id = db.Column(db.Integer, db.ForeignKey('teams.id'))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 
+    def __init__(self, **kwargs):
+        super(User, self).__init__(**kwargs)
+        if self.role is None:
+                self.role = Role.query.filter_by(default=True).first()
+
     def __repr__(self):
         return f'<User {self.username}>'
 
@@ -38,6 +43,12 @@ class User(UserMixin, db.Model):
     def created_count(self):
         count = Ticket.query.filter_by(user_id=self.id).count()
         return count
+
+    def can(self, perm):
+        return self.role is not None and self.role.has_permission(perm)
+
+    def is_administrator(self):
+        return self.can(Permission.ADMIN)
 
 
 class Ticket(db.Model):
@@ -92,7 +103,7 @@ class Role(db.Model):
     name = db.Column(db.String(64), unique=True)
     default = db.Column(db.Boolean, default=False, index=True)
     permissions = db.Column(db.Integer)
-    users = db.relationship('User', backref='user_role', lazy='dynamic')
+    users = db.relationship('User', backref='role', lazy='dynamic')
 
     def __init__(self, **kwargs):
         super(Role, self).__init__(**kwargs)
@@ -118,7 +129,7 @@ class Role(db.Model):
 
     @staticmethod
     def insert_roles():
-        role = {
+        roles = {
             'User': [Permission.RAISE, Permission.COMMENT],
             'Manager': [Permission.RAISE, Permission.COMMENT,
                         Permission.OWNER, Permission.CLOSE],

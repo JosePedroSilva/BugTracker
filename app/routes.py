@@ -4,15 +4,17 @@ from werkzeug.urls import url_parse
 from flask_login import logout_user, login_required, current_user, login_user
 import pygal
 from pygal.style import CleanStyle
-from app import app, db
-from app.forms import LoginForm, RegistrationForm, TicketForm, ChangePassword
-from app.models import User, Ticket, Team
+from . import app, db
+from .forms import LoginForm, RegistrationForm, TicketForm, ChangePassword
+from .models import User, Ticket, Team
+from .decorators import admin_required, permission_required
 
 @app.before_request
 def before_request():
     if current_user.is_authenticated:
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
+
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -28,7 +30,6 @@ def index():
     return render_template('index.html', title='HomePage', 
                             tickets=tickets.items, next_url=next_url,
                            prev_url=prev_url)
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -47,26 +48,40 @@ def login():
         return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
 
-
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('index'))
 
+##########################
+#   Tickets
+##########################
 
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/create', methods=['GET', 'POST'])
 @login_required
-def register():
-    form = RegistrationForm()
+def create():
+    form = TicketForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, 
-                        email=form.email.data, team_id=form.team.data.id)
-        user.set_password(form.password.data)
-        db.session.add(user)
-        db.session.commit() 
-        flash(f'User: {form.username.data} created!')
-        return redirect(url_for('login'))
-    return render_template('register.html', title='Register', form=form)
+        ticket = Ticket(
+            description=form.ticket.data, 
+            author=current_user, 
+            title=form.title.data,
+            team_id=form.team.data.id, 
+            severity_id=form.severity.data.id,
+            status_id=1)
+        db.session.add(ticket)
+        db.session.commit()
+        flash('Your ticket has been raised.')
+        return redirect(url_for('index'))
+    return render_template('create.html', title='Createticket', form=form)
+
+@app.route('/ticket/<id>', methods=['GET', 'POST'])
+@login_required
+def ticket_view(id):
+    #form = TakeOwnership()
+
+    ticket = Ticket.query.filter_by(id=id).first_or_404()
+    return render_template('ticket.html', ticket=ticket, title='ticket')   
 
 @app.route('/user_ticket_stats/<username>')
 @login_required
@@ -93,28 +108,15 @@ def mytickets_raised(username):
                             created_count=created_count, next_url=next_url,
                            prev_url=prev_url)
 
-@app.route('/create', methods=['GET', 'POST'])
-@login_required
-def create():
-    form = TicketForm()
-    if form.validate_on_submit():
-        ticket = Ticket(
-            description=form.ticket.data, 
-            author=current_user, 
-            title=form.title.data,
-            team_id=form.team.data.id, 
-            severity_id=form.severity.data.id,
-            status_id=1)
-        db.session.add(ticket)
-        db.session.commit()
-        flash('Your ticket has been raised.')
-        return redirect(url_for('index'))
-    return render_template('create.html', title='Createticket', form=form)
+##########################
+#   Options
+##########################
 
 @app.route('/settings')
 @login_required
 def settings():
     return render_template('settings.html', title='settings')
+
 
 @app.route('/change_password', methods=['GET', 'POST'])
 @login_required
@@ -132,17 +134,13 @@ def change_password():
         return redirect(url_for('settings'))
     return render_template('changePass.html', title='Change Password', form=form)
 
-@app.route('/ticket/<id>', methods=['GET', 'POST'])
-@login_required
-def ticket_view(id):
-    #form = TakeOwnership()
-
-    ticket = Ticket.query.filter_by(id=id).first_or_404()
-    return render_template('ticket.html', ticket=ticket, title='ticket')
-    
+##########################
+#   Admin required
+##########################
 
 @app.route('/admin_overview')
 @login_required
+@admin_required
 def overview():
     tickets_total = Ticket.count_total()
     tickets_per_team = Ticket.count_per_team()
@@ -168,5 +166,22 @@ def overview():
                            tickets_total=tickets_total, tickets_per_status=tickets_per_status,
                            tickets_per_sev=tickets_per_sev, team_chart=team_chart,
                            status_chart=status_chart, severity_chart=severity_chart)
+
+@app.route('/register', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def register():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data, 
+                        email=form.email.data, team_id=form.team.data.id)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit() 
+        flash(f'User: {form.username.data} created!')
+        return redirect(url_for('login'))
+    return render_template('register.html', title='Register', form=form)
+
+
 
 

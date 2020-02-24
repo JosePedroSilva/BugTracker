@@ -28,9 +28,13 @@
                 <li class="nav-item">
                   <a class="nav-link" href="{{ url_for('settings') }}">Options</a>
                 </li>
+
+                {% if current_user.is_administrator() %}
                 <li class="nav-item">
                   <a class="nav-link" href="{{ url_for('overview') }}">Admin</a>
                 </li>
+                {% endif %}
+
                 <li class="nav-item">
                   <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
                 </li>
