@@ -15,6 +15,14 @@
         </p>
         <p>
             {{ form.csrf_token }}
+            {{ form.role.label }}<br>
+            {{ form.role }}<br>
+            {% for error in form.role.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.csrf_token }}
             {{ form.team.label }}<br>
             {{ form.team }}<br>
             {% for error in form.team.errors %}
