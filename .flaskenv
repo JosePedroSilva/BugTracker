@@ -1,0 +1,2 @@
+FLASK_APP=bugTracker.py
+FLASK_ENV=development

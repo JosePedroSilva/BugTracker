@@ -3,6 +3,14 @@
 {% block content %}
 {% include '_settingsNAV.html' %}
   
+<h1>User: {{ user.username }}</h1>
+
+<h3>My team: {{ user.team_members.name }} </h3>
+<p>
+{% for u in team_elements %}
+{{ u.username }} <br>
+{% endfor %}
+</p>
 
 
 {% endblock %}

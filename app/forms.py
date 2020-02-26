@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from app.models import User, Team, Severity
+from app.models import User, Team, Severity, Role
 
 def team_choice():
     return Team.query
@@ -13,6 +13,9 @@ def severity_choice():
 def user_choice():
     return User.query
 
+def role_choice():
+    return Role.query
+
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -22,6 +25,9 @@ class LoginForm(FlaskForm):
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
+    role = QuerySelectField('Access:', 
+                                query_factory=role_choice, get_label='name',
+                                allow_blank=False)
     team = QuerySelectField('Team:', 
                                 query_factory=team_choice, get_label='name',
                                 allow_blank=False)
@@ -66,11 +72,23 @@ class ChangePassword(FlaskForm):
         super(ChangePassword, self).__init__(*args, **kwargs)
         self.username = username
 
-class TakeOwnership(FlaskForm):
-    userField = QuerySelectField('Owner:',
-                                    query_factory=user_choice, get_label='username')
+# class TakeOwnership(FlaskForm):
+#     userField = QuerySelectField('Owner:',
+#                                     query_factory=user_choice, get_label='username')
     
     # def __init__(self, username, *args, **kwargs):
     #     super(TakeOwnership, self).__init__(*args, **kwargs)
     #     self.username = username
+
+class EditProfileForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    role = QuerySelectField('Access:', 
+                                query_factory=role_choice, get_label='name',
+                                allow_blank=False)
+    team = QuerySelectField('Team:', 
+                                query_factory=team_choice, get_label='name',
+                                allow_blank=False)
+    submit = SubmitField('Submit')
+
 

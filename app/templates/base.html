@@ -23,14 +23,18 @@
                 </li>
                 <li class="nav-item">
                 <li class="nav-item active">
-                  <a class="nav-link" href="{{ url_for('user_ticket_stats', username=current_user.username) }}">My Tickets<span class="sr-only">(current)</span></a>
+                  <a class="nav-link" href="{{ url_for('mytickets_raised', username=current_user.username) }}">My Tickets<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{{ url_for('settings') }}">Options</a>
+                  <a class="nav-link" href="{{ url_for('settings', username=current_user.username) }}">Options</a>
                 </li>
+
+                {% if current_user.is_administrator() %}
                 <li class="nav-item">
                   <a class="nav-link" href="{{ url_for('overview') }}">Admin</a>
                 </li>
+                {% endif %}
+
                 <li class="nav-item">
                   <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
                 </li>

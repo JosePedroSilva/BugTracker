@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-    
-    <h2>Tickets unallocated</h2>
+{% include '_adminNav.html' %}
+    <h1>All tickets</h1>
 
         {% for ticket in tickets %}
             {% include '_ticket.html' %}
@@ -19,5 +19,3 @@
             {% endif %}
         </nav>
 {% endblock %}
-
-
