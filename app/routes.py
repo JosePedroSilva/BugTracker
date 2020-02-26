@@ -5,7 +5,7 @@ from flask_login import logout_user, login_required, current_user, login_user
 import pygal
 from pygal.style import CleanStyle
 from . import app, db
-from .forms import LoginForm, RegistrationForm, TicketForm, ChangePassword, EditProfileForm
+from .forms import LoginForm, RegistrationForm, TicketForm, ChangePassword, EditProfileForm, TakeOwnership
 from .models import User, Ticket, Team, Role
 from .decorators import admin_required, permission_required
 
