@@ -78,10 +78,16 @@ def create():
 @app.route('/ticket/<id>', methods=['GET', 'POST'])
 @login_required
 def ticket_view(id):
-    #form = TakeOwnership()
-
+    form = TakeOwnership()
     ticket = Ticket.query.filter_by(id=id).first_or_404()
-    return render_template('ticket.html', ticket=ticket, title='ticket')
+    if form.validate_on_submit():
+        ticket.owner_id = form.ticket_owner.data.id
+        db.session.commit()
+        flash(f'Ticket attributed to {ticket.ticket_owner.username}')
+        return redirect(url_for('ticket_view', id=ticket.id))
+    elif request.method == 'GET':
+        form.ticket_owner.data = ticket.ticket_owner
+    return render_template('ticket.html', ticket=ticket, title='ticket', form=form)
 
 
 @app.route('/mytickets/<username>')

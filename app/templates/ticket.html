@@ -23,5 +23,16 @@
 <p> <br>Description: <br> {{ ticket.description }}</p>
 
 
-
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.csrf_token }}
+        {{ form.ticket_owner.label }}<br>
+        {{ form.ticket_owner }}<br>
+        {% for error in form.ticket_owner.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <p>{{ form.submit() }}</p>
+</form>
 {% endblock %}

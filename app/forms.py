@@ -73,8 +73,9 @@ class ChangePassword(FlaskForm):
         self.username = username
 
 class TakeOwnership(FlaskForm):
-    userField = QuerySelectField('Owner:',
-                                    query_factory=user_choice, get_label='username')
+    ticket_owner = QuerySelectField('Owner:',
+                                    query_factory=user_choice, get_label='username',
+                                    allow_blank=True)
     submit = SubmitField('Submit')
     
 
