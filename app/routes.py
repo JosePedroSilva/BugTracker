@@ -5,7 +5,7 @@ from flask_login import logout_user, login_required, current_user, login_user
 import pygal
 from pygal.style import CleanStyle
 from . import app, db
-from .forms import LoginForm, RegistrationForm, TicketForm, ChangePassword
+from .forms import LoginForm, RegistrationForm, TicketForm, ChangePassword, EditProfileForm
 from .models import User, Ticket, Team, Role
 from .decorators import admin_required, permission_required
 
@@ -21,13 +21,13 @@ def before_request():
 @login_required
 def index():
     page = request.args.get('page', 1, type=int)
-    tickets = Ticket.query.order_by(Ticket.timestamp.desc()).paginate(
+    tickets = Ticket.query.filter_by(owner_id=None).order_by(Ticket.timestamp.desc()).paginate(
         page, app.config['TICKETS_PER_PAGE'], False)
     next_url = url_for('index', page=tickets.next_num) \
         if tickets.has_next else None
     prev_url = url_for('index', page=tickets.prev_num) \
         if tickets.has_prev else None
-    return render_template('index.html', title='HomePage', 
+    return render_template('index.html', title='HomePage',
                             tickets=tickets.items, next_url=next_url,
                            prev_url=prev_url)
 
@@ -63,10 +63,10 @@ def create():
     form = TicketForm()
     if form.validate_on_submit():
         ticket = Ticket(
-            description=form.ticket.data, 
-            author=current_user, 
+            description=form.ticket.data,
+            author=current_user,
             title=form.title.data,
-            team_id=form.team.data.id, 
+            team_id=form.team.data.id,
             severity_id=form.severity.data.id,
             status_id=1)
         db.session.add(ticket)
@@ -81,15 +81,8 @@ def ticket_view(id):
     #form = TakeOwnership()
 
     ticket = Ticket.query.filter_by(id=id).first_or_404()
-    return render_template('ticket.html', ticket=ticket, title='ticket')   
+    return render_template('ticket.html', ticket=ticket, title='ticket')
 
-@app.route('/user_ticket_stats/<username>')
-@login_required
-def user_ticket_stats(username):
-    user = User.query.filter_by(username=username).first_or_404()
-    team_elements = User.query.filter_by(team_id=current_user.team_id).all()
-    return render_template('user.html', user=user, title='userTicketStats', 
-                            team_elements=team_elements)
 
 @app.route('/mytickets/<username>')
 @login_required
@@ -103,8 +96,26 @@ def mytickets_raised(username):
         if tickets.has_next else None
     prev_url = url_for('mytickets_raised', page=tickets.prev_num, username=username) \
         if tickets.has_prev else None
-    return render_template('user_tickets.html', title='mytickets', 
-                            user=user, tickets=tickets.items, 
+    return render_template('user_tickets.html', title='mytickets',
+                            user=user, tickets=tickets.items,
+                            created_count=created_count, next_url=next_url,
+                           prev_url=prev_url)
+
+
+@app.route('/tickets_handling/<username>')
+@login_required
+def handling(username):
+    page = request.args.get('page', 1, type=int)
+    user = User.query.filter_by(username=username).first_or_404()
+    tickets = current_user.owner_tickets().paginate(
+        page, app.config['TICKETS_PER_PAGE'], False)
+    created_count = current_user.handling_count()
+    next_url = url_for('mytickets_raised', page=tickets.next_num, username=username) \
+        if tickets.has_next else None
+    prev_url = url_for('mytickets_raised', page=tickets.prev_num, username=username) \
+        if tickets.has_prev else None
+    return render_template('user_handling.html', title='handling',
+                            user=user, tickets=tickets.items,
                             created_count=created_count, next_url=next_url,
                            prev_url=prev_url)
 
@@ -112,10 +123,13 @@ def mytickets_raised(username):
 #   Options
 ##########################
 
-@app.route('/settings')
+@app.route('/settings/<username>')
 @login_required
-def settings():
-    return render_template('settings.html', title='settings')
+def settings(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    team_elements = User.query.filter_by(team_id=current_user.team_id).all()
+    return render_template('settings.html', user=user, title='settings',
+                            team_elements=team_elements)
 
 
 @app.route('/change_password', methods=['GET', 'POST'])
@@ -161,7 +175,7 @@ def overview():
     for k,v in tickets_per_sev.items():
         severity_chart.add(k,v)
     severity_chart = severity_chart.render_data_uri()
-    return render_template('overview.html', title='Overview', 
+    return render_template('overview.html', title='Overview',
                             tickets_per_team=tickets_per_team,
                            tickets_total=tickets_total, tickets_per_status=tickets_per_status,
                            tickets_per_sev=tickets_per_sev, team_chart=team_chart,
@@ -173,12 +187,12 @@ def overview():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, 
+        user = User(username=form.username.data,
                         email=form.email.data, team_id=form.team.data.id,
                         role_id=form.role.data.id)
         user.set_password(form.password.data)
         db.session.add(user)
-        db.session.commit() 
+        db.session.commit()
         flash(f'User: {form.username.data} created!')
         return redirect(url_for('register'))
     return render_template('register.html', title='Register', form=form)
@@ -186,6 +200,7 @@ def register():
 
 @app.route('/all_tickets', methods=['GET', 'POST'])
 @login_required
+@admin_required
 def all_tickets():
     page = request.args.get('page', 1, type=int)
     tickets = Ticket.query.order_by(Ticket.timestamp.desc()).paginate(
@@ -194,7 +209,38 @@ def all_tickets():
         if tickets.has_next else None
     prev_url = url_for('all_tickets', page=tickets.prev_num) \
         if tickets.has_prev else None
-    return render_template('allTickets.html', title='AllTickets', 
+    return render_template('allTickets.html', title='AllTickets',
                             tickets=tickets.items, next_url=next_url,
-                           prev_url=prev_url)
+                            prev_url=prev_url)
+
+
+@app.route('/choice_profile')
+@login_required
+@admin_required
+def choice_profile():
+    users = User.query.order_by(User.username.asc())
+    return render_template('user_profile.html', title='Users', users=users)
+
+@app.route('/edit_profile/<username>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def edit_profile(username):
+    form = EditProfileForm()
+    user = User.query.filter_by(username=username).first_or_404()
+    if form.validate_on_submit():
+        user.username = form.username.data
+        user.email = form.email.data
+        user.role_id = form.role.data.id
+        user.team_id = form.team.data.id
+        db.session.commit()
+        flash(f'Your changes on user {user.username} have been saved.')
+        return redirect(url_for('choice_profile'))
+    elif request.method == 'GET':
+        form.username.data = user.username
+        form.email.data = user.email
+        form.role.data = user.role
+        form.team.data = user.team_members
+    return render_template('user_edit.html',title='edit_profile', 
+                            user=user, form=form)
+
 

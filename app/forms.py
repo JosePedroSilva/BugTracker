@@ -80,3 +80,15 @@ class ChangePassword(FlaskForm):
     #     super(TakeOwnership, self).__init__(*args, **kwargs)
     #     self.username = username
 
+class EditProfileForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    role = QuerySelectField('Access:', 
+                                query_factory=role_choice, get_label='name',
+                                allow_blank=False)
+    team = QuerySelectField('Team:', 
+                                query_factory=team_choice, get_label='name',
+                                allow_blank=False)
+    submit = SubmitField('Submit')
+
+

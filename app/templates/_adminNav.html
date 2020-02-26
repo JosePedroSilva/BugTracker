@@ -16,10 +16,10 @@
     </li>
 
     <li class="nav-item">
-      {% if title == 'Change Password' %}
-        <a class="nav-link active" href="#">Change User Profile</a>
+      {% if title == 'Users' %}
+        <a class="nav-link active" href="{{ url_for('choice_profile') }}">Users</a>
       {% else %}
-        <a class="nav-link" href="#">Change User Profile</a>
+        <a class="nav-link" href="{{ url_for('choice_profile') }}">Users</a>
         {% endif %}
     </li>
 
@@ -30,8 +30,10 @@
         <a class="nav-link" href="{{ url_for('all_tickets') }}">All tickets</a>
         {% endif %}
     </li>
-
+    {% if title == 'edit_profile' %}
     <li class="nav-item">
-      <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">nothin</a>
+      <a class="nav-link disabled active" href="#" tabindex="-1" aria-disabled="true">Editing User</a>
+    {% endif %}
     </li>
 </ul>
+

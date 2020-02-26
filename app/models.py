@@ -39,6 +39,10 @@ class User(UserMixin, db.Model):
         count = Ticket.query.filter_by(user_id=self.id).count()
         return count
 
+    def handling_count(self):
+        count = Ticket.query.filter_by(owner_id=self.id).count()
+        return count
+
     def can(self, perm):
         return self.role is not None and self.role.has_permission(perm)
 
