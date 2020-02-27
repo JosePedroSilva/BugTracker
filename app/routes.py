@@ -3,7 +3,7 @@ from flask import render_template, flash, redirect, url_for, request
 from werkzeug.urls import url_parse
 from flask_login import logout_user, login_required, current_user, login_user
 import pygal
-from pygal.style import CleanStyle
+from pygal.style import CleanStyle, BlueStyle
 from . import app, db
 from .forms import LoginForm, RegistrationForm, TicketForm, ChangePassword, EditProfileForm, TakeOwnership
 from .models import User, Ticket, Team, Role
@@ -20,6 +20,19 @@ def before_request():
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
+    user = User.query.filter_by(username=current_user.username).first_or_404()
+    myTicketsTotal = Ticket.query.filter_by(user_id=current_user.id).count()
+    myTicketsCreated = Ticket.query.filter_by(user_id=current_user.id, status_id=1).count()
+    myTicketsInProgress = Ticket.query.filter_by(user_id=current_user.id, status_id=2).count()
+    myTicketsClosed = Ticket.query.filter_by(user_id=current_user.id, status_id=3).count()
+    gauge = pygal.SolidGauge(half_pie=True, inner_radius=0.70,
+                                style=pygal.style.styles['default'](value_font_size=15))
+    gauge.add('Tickets', [{'value': myTicketsTotal, 'max_value': myTicketsTotal}])
+    gauge.add('Tickets created', [{'value': myTicketsCreated, 'max_value': myTicketsTotal, 'xlink': "url_for('mytickets_raised', username=current_user.username)"}])
+    gauge.add('Tickets in progress', [{'value': myTicketsInProgress, 'max_value': myTicketsTotal}])
+    gauge.add('Tickets closed', [{'value': myTicketsClosed, 'max_value': myTicketsTotal}])
+    gauge = gauge.render_data_uri()
+
     page = request.args.get('page', 1, type=int)
     tickets = Ticket.query.filter_by(owner_id=None).order_by(Ticket.timestamp.desc()).paginate(
         page, app.config['TICKETS_PER_PAGE'], False)
@@ -29,7 +42,7 @@ def index():
         if tickets.has_prev else None
     return render_template('index.html', title='HomePage',
                             tickets=tickets.items, next_url=next_url,
-                           prev_url=prev_url)
+                           prev_url=prev_url, user=user, gauge=gauge)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
