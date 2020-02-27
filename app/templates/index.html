@@ -1,9 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+{% if gauge_author %}
 <div id="chart">
-    <embed type="image/svg+xml" src= {{ gauge|safe }} />
+    <embed type="image/svg+xml" src= {{ gauge_author|safe }} />
   </div>
+{% endif %}
     
     <h2>Tickets unallocated</h2>
 

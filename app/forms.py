@@ -11,7 +11,7 @@ def severity_choice():
     return Severity.query
 
 def user_choice():
-    return User.query
+    return User.query.order_by(User.username).all()
 
 def role_choice():
     return Role.query
@@ -89,5 +89,15 @@ class EditProfileForm(FlaskForm):
                                 query_factory=team_choice, get_label='name',
                                 allow_blank=False)
     submit = SubmitField('Submit')
+
+    def __init__(self, original_username, *args, **kwargs):
+        super(EditProfileForm, self).__init__(*args, **kwargs)
+        self.original_username = original_username
+
+    def validate_username(self, username):
+        if username.data != self.original_username:
+            user = User.query.filter_by(username=self.username.data).first()
+            if User is not None:
+                raise ValidationError('Username in use, please use a different username.')
 
 

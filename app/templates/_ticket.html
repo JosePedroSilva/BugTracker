@@ -2,10 +2,11 @@
     <tr valign="top">
         <td> <a href="{{ url_for('ticket_view', id=ticket.id) }}"><h5 class="ticket_reference">Ref:{{ ticket.id }} {{ ticket.title }} </h5></a> 
             {% if ticket.description|length < 20 %}
+                <b>Description: </b>
                 {{ ticket.description }} 
             {% else %}
                 <b>Description: </b>
-                <br> {{ ticket.description[0:100] }} (...)
+                {{ ticket.description[0:100] }} (...)
             {% endif %}
             <p class="tickets_meta" >
             {% if ticket.ticket_severity.degree == 'low' %}
@@ -17,10 +18,12 @@
             {% else %}
                 <br>Priority: <span style="color: #DD0A08;">{{ ticket.ticket_severity.degree }}</span>
             {% endif %}
-            <br>Created: {{ moment(ticket.timestamp).fromNow() }} 
-            <br>Reported by: {{ ticket.author.username }} 
-            <br>Handled by:  {{ ticket.ticket_owner.username }}
-            <br>Team: {{ ticket.team_tickets.name }} <br></p>
+            <br>
+            Reported by: {{ ticket.author.username }} 
+            || Handled by:  {{ ticket.ticket_owner.username }}
+            || Team: {{ ticket.team_tickets.name }} 
+            || Created: {{ moment(ticket.timestamp).fromNow() }} 
+            </p>
         </td>
     </tr>
 </table>

@@ -3,12 +3,12 @@
 {% block content %}
 {% include '_adminNav.html' %}
 <div id="chart">
-  <embed type="image/svg+xml" src= {{ team_chart|safe }} />
+  <embed type="image/svg+xml" src= {{ tickets_per_team|safe }} />
   <br>
-  <embed type="image/svg+xml" src= {{ status_chart|safe }} />
-  <embed type="image/svg+xml" src= {{ severity_chart|safe }} />
+  <embed type="image/svg+xml" src= {{ tickets_per_status|safe }} />
+  <embed type="image/svg+xml" src= {{ tickets_per_sev|safe }} />
 </div>
-{% include '_statistics.html' %}
+
   
 
   <p> <br> This option page is to be implemented only for ADMIN <br>User option page won't allow to create new users</p>

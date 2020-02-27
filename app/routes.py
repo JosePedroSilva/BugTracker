@@ -8,6 +8,7 @@ from . import app, db
 from .forms import LoginForm, RegistrationForm, TicketForm, ChangePassword, EditProfileForm, TakeOwnership
 from .models import User, Ticket, Team, Role
 from .decorators import admin_required, permission_required
+from .graph import GraphicalGauge
 
 @app.before_request
 def before_request():
@@ -21,18 +22,11 @@ def before_request():
 @login_required
 def index():
     user = User.query.filter_by(username=current_user.username).first_or_404()
-    myTicketsTotal = Ticket.query.filter_by(user_id=current_user.id).count()
-    myTicketsCreated = Ticket.query.filter_by(user_id=current_user.id, status_id=1).count()
-    myTicketsInProgress = Ticket.query.filter_by(user_id=current_user.id, status_id=2).count()
-    myTicketsClosed = Ticket.query.filter_by(user_id=current_user.id, status_id=3).count()
-    gauge = pygal.SolidGauge(half_pie=True, inner_radius=0.70,
-                                style=pygal.style.styles['default'](value_font_size=15))
-    gauge.add('Tickets', [{'value': myTicketsTotal, 'max_value': myTicketsTotal}])
-    gauge.add('Tickets created', [{'value': myTicketsCreated, 'max_value': myTicketsTotal, 'xlink': "url_for('mytickets_raised', username=current_user.username)"}])
-    gauge.add('Tickets in progress', [{'value': myTicketsInProgress, 'max_value': myTicketsTotal}])
-    gauge.add('Tickets closed', [{'value': myTicketsClosed, 'max_value': myTicketsTotal}])
-    gauge = gauge.render_data_uri()
-
+    try:
+        # if there is no data related to that user this block clear the graphic error
+        gauge_author = GraphicalGauge.gauge_author(user)
+    except ZeroDivisionError:
+        gauge_author = None
     page = request.args.get('page', 1, type=int)
     tickets = Ticket.query.filter_by(owner_id=None).order_by(Ticket.timestamp.desc()).paginate(
         page, app.config['TICKETS_PER_PAGE'], False)
@@ -42,7 +36,7 @@ def index():
         if tickets.has_prev else None
     return render_template('index.html', title='HomePage',
                             tickets=tickets.items, next_url=next_url,
-                           prev_url=prev_url, user=user, gauge=gauge)
+                           prev_url=prev_url, user=user, gauge_author=gauge_author)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -176,29 +170,13 @@ def change_password():
 @admin_required
 def overview():
     tickets_total = Ticket.count_total()
-    tickets_per_team = Ticket.count_per_team()
-    tickets_per_status = Ticket.count_per_status()
-    tickets_per_sev = Ticket.count_per_severity()
-    team_chart = pygal.Pie(style=CleanStyle)
-    team_chart.title = 'Team count'
-    for k,v in tickets_per_team.items():
-        team_chart.add(k, v)
-    team_chart = team_chart.render_data_uri()
-    status_chart = pygal.Pie(half_pie=True, style=CleanStyle)
-    status_chart.title = 'Status count'
-    for k,v in tickets_per_status.items():
-        status_chart.add(k,v)
-    status_chart = status_chart.render_data_uri()
-    severity_chart = pygal.Pie()
-    severity_chart.title = 'Priority count'
-    for k,v in tickets_per_sev.items():
-        severity_chart.add(k,v)
-    severity_chart = severity_chart.render_data_uri()
+    tickets_per_team = GraphicalGauge.tickets_per_team()
+    tickets_per_status = GraphicalGauge.tickets_per_status()
+    tickets_per_sev = GraphicalGauge.tickets_per_sev()   
     return render_template('overview.html', title='Overview',
                             tickets_per_team=tickets_per_team,
                            tickets_total=tickets_total, tickets_per_status=tickets_per_status,
-                           tickets_per_sev=tickets_per_sev, team_chart=team_chart,
-                           status_chart=status_chart, severity_chart=severity_chart)
+                           tickets_per_sev=tickets_per_sev)
 
 @app.route('/register', methods=['GET', 'POST'])
 @login_required
@@ -244,7 +222,7 @@ def choice_profile():
 @login_required
 @admin_required
 def edit_profile(username):
-    form = EditProfileForm()
+    form = EditProfileForm(current_user.username)
     user = User.query.filter_by(username=username).first_or_404()
     if form.validate_on_submit():
         user.username = form.username.data
