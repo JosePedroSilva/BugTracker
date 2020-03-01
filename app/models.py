@@ -17,6 +17,7 @@ class User(UserMixin, db.Model):
                                 backref='ticket_owner', lazy='dynamic') # Defines the user has the person in charge/handling the issue
     team_id = db.Column(db.Integer, db.ForeignKey('teams.id'))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    comments = db.relationship('Comment', backref='comment_author', lazy='dynamic')
 
     def __repr__(self):
         return f'<User {self.username}>'
@@ -61,6 +62,7 @@ class Ticket(db.Model):
     team_id = db.Column(db.Integer, db.ForeignKey('teams.id'))
     severity_id = db.Column(db.Integer, db.ForeignKey('severity.id'))
     status_id = db.Column(db.Integer, db.ForeignKey('status.id'))
+    comments = db.relationship('Comment', backref='comment_ticket', lazy='dynamic')
 
     def __repr__(self):
         return f'<Ticket {self.id}: {self.description}>'
@@ -156,6 +158,16 @@ class Team(db.Model):
     def __repr__(self):
         return f'{self.name}'
 
+    @staticmethod
+    def insert_teams():
+        teams = ['Front Office', 'Middle Office', 'Back Office', 'Support']
+        for t in teams:
+            team = Team.query.filter_by(name=t).first()
+            if team is None:
+                team = Team(name=t)
+            db.session.add(team)
+        db.session.commit()
+
 class Severity(db.Model):
     __tablename__='severity'
     id = db.Column(db.Integer, primary_key=True)
@@ -177,3 +189,11 @@ class Status(db.Model):
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
+class Comment(db.Model):
+    __tablename__ = 'comments'
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    ticket_id = db.Column(db.Integer, db.ForeignKey('tickets.id'))

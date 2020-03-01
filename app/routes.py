@@ -5,8 +5,8 @@ from flask_login import logout_user, login_required, current_user, login_user
 import pygal
 from pygal.style import CleanStyle, BlueStyle
 from . import app, db
-from .forms import LoginForm, RegistrationForm, TicketForm, ChangePassword, EditProfileForm, TakeOwnership
-from .models import User, Ticket, Team, Role
+from .forms import LoginForm, RegistrationForm, TicketForm, ChangePassword, EditProfileForm, TakeOwnership, CommentForm
+from .models import User, Ticket, Team, Role, Comment
 from .decorators import admin_required, permission_required
 from .graph import GraphicalGauge
 
@@ -86,15 +86,26 @@ def create():
 @login_required
 def ticket_view(id):
     form = TakeOwnership()
+    commentForm = CommentForm()
+    comments = Comment.query.filter_by(ticket_id=id).order_by(Comment.timestamp.desc()).all()
     ticket = Ticket.query.filter_by(id=id).first_or_404()
-    if form.validate_on_submit():
+    if form.submit.data and form.validate():
         ticket.owner_id = form.ticket_owner.data.id
+        ticket.status_id = 2
         db.session.commit()
         flash(f'Ticket attributed to {ticket.ticket_owner.username}')
         return redirect(url_for('ticket_view', id=ticket.id))
+    elif commentForm.submit2.data and commentForm.validate():
+        comment = Comment(body=commentForm.body.data, ticket_id=ticket.id, 
+                            author_id=current_user.id)
+        db.session.add(comment)
+        db.session.commit()
+        flash('Your comment has been added')
+        return redirect(url_for('ticket_view', id=ticket.id))
     elif request.method == 'GET':
         form.ticket_owner.data = ticket.ticket_owner
-    return render_template('ticket.html', ticket=ticket, title='ticket', form=form)
+    return render_template('ticket.html', ticket=ticket, title='ticket', 
+                            form=form, commentForm=commentForm, comments=comments)
 
 
 @app.route('/mytickets/<username>')

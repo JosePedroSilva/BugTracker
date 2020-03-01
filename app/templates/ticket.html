@@ -3,7 +3,18 @@
 {% block content %}
 
 <h3>Ref: {{ ticket.id }}</h3>
-<h1>{{ ticket.title }}</h1>
+<h2>{{ ticket.title }}</h2>
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.csrf_token }}
+        {{ form.ticket_owner.label }}
+        {{ form.ticket_owner }}
+        {% for error in form.ticket_owner.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+        {{ form.submit() }}</p>
+</form>
 <p class="tickets_meta" >
     {% if ticket.ticket_severity.degree == 'low' %}
         <br>Priority: <span style="color: #3CD448;">{{ ticket.ticket_severity.degree }}</span>
@@ -17,22 +28,33 @@
     <br>Status: {{ (ticket.ticket_status.status)}}
     <br>Created: {{ moment(ticket.timestamp).fromNow() }} 
     <br>Reported by: {{ ticket.author.username }} 
-    <br>Handled by:  {{ ticket.ticket_owner.username }}
     <br>Team: {{ ticket.team_tickets.name }} <br></p>
 
 <p> <br>Description: <br> {{ ticket.description }}</p>
 
+<h2>Comments: </h2>
+{% for comment in comments %}
+<table class="table table-striped">
+    <tr valign="top">
+        <td>
+            Comment by: {{ comment.comment_author.username }} <br>
+            Comment:  {{ comment.body }} <br>
+            Created: {{ moment(comment.timestamp).fromNow() }} 
+        </td>
+    </tr>
+</table>
+{% endfor %}
+
 
 <form action="" method="post">
-    {{ form.hidden_tag() }}
+    {{ commentForm.hidden_tag() }}
     <p>
-        {{ form.csrf_token }}
-        {{ form.ticket_owner.label }}<br>
-        {{ form.ticket_owner }}<br>
-        {% for error in form.ticket_owner.errors %}
+        {{ commentForm.body.label }}<br>
+        {{ commentForm.body(cols=200, rows=10) }}<br>
+        {% for error in commentForm.body.errors %}
         <span style="color: red;">[{{ error }}]</span>
         {% endfor %}
     </p>
-    <p>{{ form.submit() }}</p>
+    <p>{{ commentForm.submit2() }}</p>
 </form>
 {% endblock %}

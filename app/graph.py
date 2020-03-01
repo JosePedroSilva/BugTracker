@@ -21,7 +21,7 @@ class GraphicalGauge:
 
     def tickets_per_team():
         tickets_per_team = Ticket.count_per_team()
-        team_chart = pygal.Pie()
+        team_chart = pygal.Pie(width=2000)
         team_chart.title = 'Team count'
         for k,v in tickets_per_team.items():
             team_chart.add(k, v)
@@ -30,7 +30,7 @@ class GraphicalGauge:
 
     def tickets_per_status():
         tickets_per_status = Ticket.count_per_status()
-        status_chart = pygal.Pie(half_pie=True)
+        status_chart = pygal.Pie(width=2000)
         status_chart.title = 'Status count'
         for k,v in tickets_per_status.items():
             status_chart.add(k,v)
@@ -39,7 +39,7 @@ class GraphicalGauge:
 
     def tickets_per_sev():
         tickets_per_sev = Ticket.count_per_severity()
-        severity_chart = pygal.Pie()
+        severity_chart = pygal.Pie(width=2000)
         severity_chart.title = 'Priority count'
         for k,v in tickets_per_sev.items():
             severity_chart.add(k,v)
