@@ -177,6 +177,16 @@ class Severity(db.Model):
     def __repr__(self):
         return f'{self.degree}'
 
+    @staticmethod
+    def insert_severity():
+        sevs = ['low', 'medium', 'high', 'critical']
+        for s in sevs:
+            sev = Severity.query.filter_by(degree=s).first()
+            if sev is None:
+                sev = Severity(degree=s)
+            db.session.add(sev)
+        db.session.commit()
+
 class Status(db.Model):
     __tablename__='status'
     id = db.Column(db.Integer, primary_key=True)
@@ -186,9 +196,15 @@ class Status(db.Model):
     def __repr__(self):
         return f'{self.status}'
 
-@login.user_loader
-def load_user(id):
-    return User.query.get(int(id))
+    @staticmethod
+    def insert_status():
+        status = ['created', 'in progress', 'closed']
+        for s in status:
+            stat = Status.query.filter_by(status=s).first()
+            if stat is None:
+                stat = Status(status=s)
+            db.session.add(stat)
+        db.session.commit()
 
 class Comment(db.Model):
     __tablename__ = 'comments'
@@ -197,3 +213,7 @@ class Comment(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     ticket_id = db.Column(db.Integer, db.ForeignKey('tickets.id'))
+
+@login.user_loader
+def load_user(id):
+    return User.query.get(int(id))
