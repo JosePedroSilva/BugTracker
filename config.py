@@ -3,7 +3,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'my-secret-key'
-    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://postgres:2427@localhost/bugTracker'
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://postgres:pass@hostname/dbname'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
     MAIL_PORT = int(os.environ.get('MAIL_PORT') or 25)
