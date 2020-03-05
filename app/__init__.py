@@ -17,6 +17,7 @@ login = LoginManager(app)
 login.login_view = 'login'
 moment = Moment(app)
 
+# Error logs 
 if not app.debug:
     if app.config['MAIL_SERVER']:
         auth = None

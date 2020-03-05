@@ -5,6 +5,7 @@ from app import db, login
 
 
 class User(UserMixin, db.Model):
+    """Creates User model"""
     __tablename__='users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
@@ -29,10 +30,12 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
     def created_tickets(self):
+        """Returns the tickets that the user has open"""
         created = Ticket.query.filter_by(user_id=self.id)
         return created.order_by(Ticket.timestamp.desc())
 
     def owner_tickets(self):
+        """Returns the tickets that the user is handling"""
         owner = Ticket.query.filter_by(owner_id=self.id)
         return owner.order_by(Ticket.timestamp.desc())
 
@@ -52,6 +55,7 @@ class User(UserMixin, db.Model):
 
 
 class Ticket(db.Model):
+    """Creates ticket model"""
     __tablename__='tickets'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(64))
@@ -99,6 +103,7 @@ class Permission:
 
 
 class Role(db.Model):
+    """Creates role model"""
     __tablename__='roles'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
@@ -129,6 +134,10 @@ class Role(db.Model):
 
     @staticmethod
     def insert_roles():
+        """Populates roles
+        Upon first time implementation run Role.insert_roles() to populate the user roles
+        """
+
         roles = {
             'User': [Permission.RAISE, Permission.COMMENT],
             'Manager': [Permission.RAISE, Permission.COMMENT,
@@ -159,7 +168,12 @@ class Team(db.Model):
         return f'{self.name}'
 
     @staticmethod
-    def insert_teams():
+    def insert_teams():    
+        """Populates teams
+            Upon first time implementation run Team.insert_teams() to populate the user teams
+            To change the team name just alter the teams variable
+        """
+
         teams = ['Front Office', 'Middle Office', 'Back Office', 'Support']
         for t in teams:
             team = Team.query.filter_by(name=t).first()
@@ -179,6 +193,10 @@ class Severity(db.Model):
 
     @staticmethod
     def insert_severity():
+        """Populates severity
+            Upon first time implementation run Severity.insert_severity() to populate the ticket severity
+            To change the severity name just alter the status sevs
+        """
         sevs = ['low', 'medium', 'high', 'critical']
         for s in sevs:
             sev = Severity.query.filter_by(degree=s).first()
@@ -198,6 +216,10 @@ class Status(db.Model):
 
     @staticmethod
     def insert_status():
+        """Populates status
+            Upon first time implementation run Status.insert_status() to populate the ticket status
+            To change the status name just alter the status variable
+        """
         status = ['created', 'in progress', 'closed']
         for s in status:
             stat = Status.query.filter_by(status=s).first()
