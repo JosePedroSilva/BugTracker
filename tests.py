@@ -9,10 +9,10 @@ class UserModelCase(unittest.TestCase):
         app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:2427@localhost/bugtest'
         db.create_all()
 
-    # def tearDown(self):
-    #     """Removes db"""
-    #     db.session.remove()
-    #     db.drop_all()
+    def tearDown(self):
+        """Removes db"""
+        db.session.remove()
+        db.drop_all()
 
     def test_password_hashing(self):
         """ Password hashing test """
