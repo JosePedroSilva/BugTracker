@@ -7,7 +7,6 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_moment import Moment
 from logging.handlers import RotatingFileHandler, SMTPHandler
-from commands import create_admin, create_tables
 
 
 app = Flask(__name__)
@@ -17,8 +16,7 @@ migrate = Migrate(app, db)
 login = LoginManager(app)
 login.login_view = 'login'
 moment = Moment(app)
-app.cli.add_command(create_admin)
-app.cli.add_command(create_tables)
+
 
 # Error logs 
 if not app.debug:
