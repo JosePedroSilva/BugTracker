@@ -4,6 +4,8 @@
 
 <h3>Ref: {{ ticket.id }}</h3>
 <h2>{{ ticket.title }}</h2>
+
+{% if current_user.role_id == 2 or current_user.role_id == 3 %}
 <form action="" method="post">
     {{ form.hidden_tag() }}
     <p>
@@ -15,6 +17,7 @@
         {% endfor %}
         {{ form.submit() }}</p>
 </form>
+{% endif %}
 <p class="tickets_meta" >
     {% if ticket.ticket_severity.degree == 'low' %}
         <br>Priority: <span style="color: #3CD448;">{{ ticket.ticket_severity.degree }}</span>
