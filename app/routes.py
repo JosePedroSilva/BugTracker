@@ -252,3 +252,11 @@ def edit_profile(username):
                             user=user, form=form)
 
 
+@app.route('/edit_teams')
+@login_required
+@admin_required
+def edit_teams():
+    teams = Team.query.order_by(Team.id.asc())
+    return render_template('admin_team_view.html', title='edit_team', 
+                            teams=teams)
+

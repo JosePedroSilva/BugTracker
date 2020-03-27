@@ -30,6 +30,15 @@
         <a class="nav-link" href="{{ url_for('all_tickets') }}">All tickets</a>
         {% endif %}
     </li>
+
+    <li class="nav-item">
+      {% if title == 'edit_team' %}
+        <a class="nav-link active" href="{{ url_for('edit_teams') }}">Edit Teams</a>
+      {% else %}
+        <a class="nav-link" href="{{ url_for('edit_teams') }}">Edit Teams</a>
+        {% endif %}
+    </li>
+
     {% if title == 'edit_profile' %}
     <li class="nav-item">
       <a class="nav-link disabled active" href="#" tabindex="-1" aria-disabled="true">Editing User</a>
