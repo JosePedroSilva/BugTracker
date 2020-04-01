@@ -6,7 +6,7 @@ import pygal
 from pygal.style import CleanStyle, BlueStyle
 from . import app, db
 from .forms import LoginForm, RegistrationForm, TicketForm, ChangePassword, EditProfileForm, TakeOwnership, CommentForm
-from .models import User, Ticket, Team, Role, Comment
+from .models import User, Ticket, Team, Role, Comment, Topic
 from .decorators import admin_required, permission_required
 from .graph import GraphicalGauge
 
@@ -75,7 +75,8 @@ def create():
             title=form.title.data,
             team_id=form.team.data.id,
             severity_id=form.severity.data.id,
-            status_id=1)
+            status_id=1,
+            topics=form.topic.data.id)
         db.session.add(ticket)
         db.session.commit()
         flash('Your ticket has been raised.')

@@ -249,9 +249,9 @@ class Topic(db.Model):
         """
         topicsList = ['Report', 'Bug', 'Fix', 'Implementation']
         for t in topicsList:
-            top = Ticket.query.filter_by(topic=t).first()
+            top = Topic.query.filter_by(topic=t).first()
             if top is None:
-                top = Ticket(topic=t)
+                top = Topic(topic=t)
             db.session.add(top)
         db.session.commit()
 

@@ -14,6 +14,14 @@
         </p>
         <p>
             {{ form.csrf_token }}
+            {{ form.topic.label }}<br>
+            {{ form.topic }}<br>
+            {% for error in form.topic.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.csrf_token }}
             {{ form.severity.label }}<br>
             {{ form.severity }}<br>
             {% for error in form.severity.errors %}

@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from app.models import User, Team, Severity, Role
+from app.models import User, Team, Severity, Role, Topic
 
 def team_choice():
     return Team.query
@@ -15,6 +15,9 @@ def user_choice():
 
 def role_choice():
     return Role.query
+
+def topic_choice():
+    return Topic.query
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -59,6 +62,9 @@ class TicketForm(FlaskForm):
                             allow_blank=False)
     ticket = TextAreaField('Please describe the issue.', validators=[
         DataRequired(), Length(min=1, max=1000)])
+    topic = QuerySelectField('Topic:',
+                            query_factory=topic_choice, get_label='topic',
+                            allow_blank=False)
     submit = SubmitField('Submit')
 
 class ChangePassword(FlaskForm):
