@@ -67,6 +67,7 @@ class Ticket(db.Model):
     severity_id = db.Column(db.Integer, db.ForeignKey('severity.id'))
     status_id = db.Column(db.Integer, db.ForeignKey('status.id'))
     comments = db.relationship('Comment', backref='comment_ticket', lazy='dynamic')
+    topics = db.Column(db.Integer, db.ForeignKey('topics.id'))
 
     def __repr__(self):
         return f'<Ticket {self.id}: {self.description}>'
@@ -92,7 +93,6 @@ class Ticket(db.Model):
                         Ticket.query.filter_by(severity_id=s).count()
                         for s in range(1, Severity.query.count()+1)}
         return sev_count
-
 
 class Permission:
     RAISE = 1
@@ -236,6 +236,26 @@ class Comment(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     ticket_id = db.Column(db.Integer, db.ForeignKey('tickets.id'))
 
+class Topic(db.Model):
+    __tablename__='topics'
+    id = db.Column(db.Integer, primary_key=True)
+    topic = db.Column(db.String(32), unique=True)
+    ticket_topic = db.relationship('Ticket', backref='ticket_topic')
+
+    @staticmethod
+    def insert_topics():
+        """
+        Populates topics
+        """
+        topicsList = ['Report', 'Bug', 'Fix', 'Implementation']
+        for t in topicsList:
+            top = Ticket.query.filter_by(topic=t).first()
+            if top is None:
+                top = Ticket(topic=t)
+            db.session.add(top)
+        db.session.commit()
+
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
