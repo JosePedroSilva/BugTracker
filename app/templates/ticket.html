@@ -17,6 +17,17 @@
         {% endfor %}
         {{ form.submit() }}</p>
 </form>
+<form action="" method="post">
+    {{ statusForm.hidden_tag() }}
+    <p>
+        {{ statusForm.csrf_token }}
+        {{ statusForm.current_status.label }}
+        {{ statusForm.current_status }}
+        {% for error in statusForm.current_status.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+        {{ statusForm.submit3() }}</p>
+</form>
 {% endif %}
 <p class="tickets_meta" >
     {% if ticket.ticket_severity.degree == 'low' %}

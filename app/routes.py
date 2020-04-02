@@ -5,7 +5,7 @@ from flask_login import logout_user, login_required, current_user, login_user
 import pygal
 from pygal.style import CleanStyle, BlueStyle
 from . import app, db
-from .forms import LoginForm, RegistrationForm, TicketForm, ChangePassword, EditProfileForm, TakeOwnership, CommentForm
+from .forms import LoginForm, RegistrationForm, TicketForm, ChangePassword, EditProfileForm, TakeOwnership, CommentForm, ChangeStatus
 from .models import User, Ticket, Team, Role, Comment, Topic
 from .decorators import admin_required, permission_required
 from .graph import GraphicalGauge
@@ -88,6 +88,7 @@ def create():
 def ticket_view(id):
     form = TakeOwnership()
     commentForm = CommentForm()
+    statusForm = ChangeStatus()
     comments = Comment.query.filter_by(ticket_id=id).order_by(Comment.timestamp.desc()).all()
     ticket = Ticket.query.filter_by(id=id).first_or_404()
     if form.submit.data and form.validate():
@@ -95,6 +96,11 @@ def ticket_view(id):
         ticket.status_id = 2
         db.session.commit()
         flash(f'Ticket attributed to {ticket.ticket_owner.username}')
+        return redirect(url_for('ticket_view', id=ticket.id))
+    elif statusForm.submit3.data and statusForm.validate():
+        ticket.status_id = statusForm.current_status.data.id
+        db.session.commit()
+        flash('Ticket status updated')
         return redirect(url_for('ticket_view', id=ticket.id))
     elif commentForm.submit2.data and commentForm.validate():
         comment = Comment(body=commentForm.body.data, ticket_id=ticket.id, 
@@ -105,8 +111,10 @@ def ticket_view(id):
         return redirect(url_for('ticket_view', id=ticket.id))
     elif request.method == 'GET':
         form.ticket_owner.data = ticket.ticket_owner
+        statusForm.current_status.data = ticket.ticket_status
     return render_template('ticket.html', ticket=ticket, title='ticket', 
-                            form=form, commentForm=commentForm, comments=comments)
+                            form=form, commentForm=commentForm, comments=comments,
+                            statusForm=statusForm)
 
 
 @app.route('/mytickets/<username>')
