@@ -122,7 +122,7 @@ def ticket_view(id):
 def mytickets_raised(username):
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
-    tickets = current_user.created_tickets().paginate(
+    tickets = current_user.created_tickets().filter(Ticket.status_id < 3).paginate(
         page, app.config['TICKETS_PER_PAGE'], False)
     created_count = current_user.created_count()
     next_url = url_for('mytickets_raised', page=tickets.next_num, username=username) \
@@ -140,7 +140,7 @@ def mytickets_raised(username):
 def handling(username):
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
-    tickets = current_user.owner_tickets().paginate(
+    tickets = current_user.owner_tickets().filter(Ticket.status_id < 3).paginate(
         page, app.config['TICKETS_PER_PAGE'], False)
     created_count = current_user.handling_count()
     next_url = url_for('mytickets_raised', page=tickets.next_num, username=username) \

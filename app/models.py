@@ -44,7 +44,7 @@ class User(UserMixin, db.Model):
         return count
 
     def handling_count(self):
-        count = Ticket.query.filter_by(owner_id=self.id).count()
+        count = Ticket.query.filter_by(owner_id=self.id).filter(Ticket.status_id < 3).count()
         return count
 
     def can(self, perm):
