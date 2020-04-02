@@ -1,26 +1,37 @@
 <ul class="nav nav-tabs">
+
+
   <li class="nav-item">
-
-    <li class="nav-item">
-      {% if title == 'handling' %}
-        <a class="nav-link active" href="{{ url_for('handling', username=current_user.username) }}">Handled by me</a>
-      {% else %}
-        <a class="nav-link" href="{{ url_for('handling', username=current_user.username) }}">Handled by me</a>
-      {% endif %}
-    </li>
-
-    {% if title == 'mytickets' %}
-      <a class="nav-link active" href="{{ url_for('mytickets_raised', username=current_user.username) }}">Raised by me</a>
+    {% if title == 'handling' %}
+      <a class="nav-link active" href="{{ url_for('handling', username=current_user.username) }}">Handled by me</a>
     {% else %}
-      <a class="nav-link" href="{{ url_for('mytickets_raised', username=current_user.username) }}">Raised by me</a>
+      <a class="nav-link" href="{{ url_for('handling', username=current_user.username) }}">Handled by me</a>
     {% endif %}
   </li>
 
   <li class="nav-item">
-    {% if title == 'Change Password' %}
-      <a class="nav-link disabled" href="#">My Team Issues</a>
+  {% if title == 'mytickets' %}
+    <a class="nav-link active" href="{{ url_for('mytickets_raised', username=current_user.username) }}">Raised by me</a>
+  {% else %}
+    <a class="nav-link" href="{{ url_for('mytickets_raised', username=current_user.username) }}">Raised by me</a>
+  {% endif %}
+  </li>
+
+  <li class="nav-item">
+    {% if title == 'myticketsClosed' %}
+      <a class="nav-link active" href="{{ url_for('mytickets_closed', username=current_user.username) }}">My Tickets Closed</a>
     {% else %}
-      <a class="nav-link disabled" href="#">My Team Issues</a>
+      <a class="nav-link" href="{{ url_for('mytickets_closed', username=current_user.username) }}">My Tickets Closed</a>
     {% endif %}
   </li>
+
+  <li class="nav-item">
+    {% if title == 'myTeamTickets' %}
+      <a class="nav-link active" href="{{ url_for('myTeam_tickets') }}">My Team</a>
+    {% else %}
+      <a class="nav-link" href="{{ url_for('myTeam_tickets') }}">My Team</a>
+    {% endif %}
+  </li>
+
+
 </ul>

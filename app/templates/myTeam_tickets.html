@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% include '_myTicketsNav.html' %}
+
+<table>
+    <tr valign="top">
+        <td><h1>My team issues</h1></td>
+    </tr>
+</table>
+<hr>
+{% for ticket in tickets %}
+<p>
+    {% include '_ticket.html' %}
+</p>
+{% endfor %}
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-end">
+    {% if prev_url %}
+        <li class="page-item"><a class="page-link" href="{{ prev_url }}">Previous</a></li>
+    {% else %}
+    <li class="page-item disabled"><a class="page-link" href="{{ prev_url }}">Previous</a></li>
+    {% endif %}
+    {% if next_url %}
+        <li class="page-item"><a class="page-link" href="{{ next_url }}">Next</a></li>
+    {% endif %}
+</nav>
+{% endblock %}

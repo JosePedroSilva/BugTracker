@@ -143,14 +143,43 @@ def handling(username):
     tickets = current_user.owner_tickets().filter(Ticket.status_id < 3).paginate(
         page, app.config['TICKETS_PER_PAGE'], False)
     created_count = current_user.handling_count()
-    next_url = url_for('mytickets_raised', page=tickets.next_num, username=username) \
+    next_url = url_for('handling', page=tickets.next_num, username=username) \
         if tickets.has_next else None
-    prev_url = url_for('mytickets_raised', page=tickets.prev_num, username=username) \
+    prev_url = url_for('handling', page=tickets.prev_num, username=username) \
         if tickets.has_prev else None
     return render_template('user_handling.html', title='handling',
                             user=user, tickets=tickets.items,
                             created_count=created_count, next_url=next_url,
                            prev_url=prev_url)
+
+@app.route('/tickets_closed/<username>')
+@login_required
+def mytickets_closed(username):
+    page = request.args.get('page', 1, type=int)
+    user = User.query.filter_by(username=username).first_or_404()
+    tickets = current_user.created_tickets().filter_by(status_id=3).paginate(
+        page, app.config['TICKETS_PER_PAGE'], False)
+    next_url = url_for('mytickets_closed', page=tickets.next_num, username=username) \
+        if tickets.has_next else None
+    prev_url = url_for('mytickets_closed', page=tickets.prev_num, username=username) \
+        if tickets.has_prev else None
+    return render_template('user_tickets.html', title='myticketsClosed',
+                            user=user, tickets=tickets.items,
+                            next_url=next_url, prev_url=prev_url)
+
+@app.route('/myTeamTickets')
+@login_required
+def myTeam_tickets():
+    page = request.args.get('page', 1, type=int) 
+    tickets = Ticket.query.filter_by(team_id=current_user.team_id).order_by(Ticket.timestamp.desc()).paginate(
+        page, app.config['TICKETS_PER_PAGE'], False)
+    next_url = url_for('myTeam_tickets', page=tickets.next_num) \
+        if tickets.has_next else None
+    prev_url = url_for('myTeam_tickets', page=tickets.prev_num) \
+        if tickets.has_prev else None
+    return render_template('myTeam_tickets.html', title='myTeamTickets',
+                            tickets=tickets.items, next_url=next_url, prev_url=prev_url)
+    
 
 ##########################
 #   Options
