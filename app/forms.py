@@ -103,6 +103,7 @@ class EditProfileForm(FlaskForm):
     team = QuerySelectField('Team:', 
                                 query_factory=team_choice, get_label='name',
                                 allow_blank=False)
+    active = BooleanField('Active user:  ')
     submit = SubmitField('Submit')
 
     def __init__(self, original_username, *args, **kwargs):

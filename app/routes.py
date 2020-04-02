@@ -45,7 +45,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-        if user is None or not user.check_password(form.password.data):
+        if user is None or not user.check_password(form.password.data) or not user.active:
             flash('Invalid username or password')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
@@ -243,7 +243,6 @@ def register():
         return redirect(url_for('register'))
     return render_template('register.html', title='Register', form=form)
 
-
 @app.route('/all_tickets', methods=['GET', 'POST'])
 @login_required
 @admin_required
@@ -258,7 +257,6 @@ def all_tickets():
     return render_template('allTickets.html', title='AllTickets',
                             tickets=tickets.items, next_url=next_url,
                             prev_url=prev_url)
-
 
 @app.route('/choice_profile')
 @login_required
@@ -278,6 +276,7 @@ def edit_profile(username):
         user.email = form.email.data
         user.role_id = form.role.data.id
         user.team_id = form.team.data.id
+        user.active = form.active.data
         db.session.commit()
         flash(f'Your changes on user {user.username} have been saved.')
         return redirect(url_for('choice_profile'))
@@ -286,9 +285,9 @@ def edit_profile(username):
         form.email.data = user.email
         form.role.data = user.role
         form.team.data = user.team_members
+        form.active.data = user.active
     return render_template('user_edit.html',title='edit_profile', 
                             form=form, user=user)
-
 
 @app.route('/edit_teams')
 @login_required

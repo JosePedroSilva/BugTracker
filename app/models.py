@@ -19,6 +19,7 @@ class User(UserMixin, db.Model):
     team_id = db.Column(db.Integer, db.ForeignKey('teams.id'))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     comments = db.relationship('Comment', backref='comment_author', lazy='dynamic')
+    active = db.Column(db.Boolean, default=True)
 
     def __repr__(self):
         return f'<User {self.username}>'
