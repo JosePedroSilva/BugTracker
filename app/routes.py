@@ -234,8 +234,8 @@ def choice_profile():
 @login_required
 @admin_required
 def edit_profile(username):
-    form = EditProfileForm(current_user.username)
-    user = User.query.filter_by(username=username).first_or_404()
+    user = User.query.filter_by(username=username).first()
+    form = EditProfileForm(user.username)
     if form.validate_on_submit():
         user.username = form.username.data
         user.email = form.email.data
@@ -250,7 +250,7 @@ def edit_profile(username):
         form.role.data = user.role
         form.team.data = user.team_members
     return render_template('user_edit.html',title='edit_profile', 
-                            user=user, form=form)
+                            form=form, user=user)
 
 
 @app.route('/edit_teams')
