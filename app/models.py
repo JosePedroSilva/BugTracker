@@ -40,7 +40,7 @@ class User(UserMixin, db.Model):
         return owner.order_by(Ticket.timestamp.desc())
 
     def created_count(self):
-        count = Ticket.query.filter_by(user_id=self.id).count()
+        count = Ticket.query.filter_by(user_id=self.id).filter(Ticket.status_id < 3).count()
         return count
 
     def handling_count(self):
