@@ -11,7 +11,7 @@ def severity_choice():
     return Severity.query
 
 def user_choice():
-    return User.query.order_by(User.username).all()
+    return User.query.filter_by(active=True).order_by(User.username).all()
 
 def role_choice():
     return Role.query
