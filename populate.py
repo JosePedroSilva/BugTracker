@@ -3,7 +3,7 @@ from sqlalchemy.exc import IntegrityError
 from app.models import User, Role, Status, Topic, Team
 
 def create_admin():
-    u = User(username='firstAdmin')
+    u = User(username='firstAdmin', role_id=3)
     u.set_password('firstAdmin')
     db.session.add(u)
     db.session.commit()
@@ -61,6 +61,7 @@ def insert_topics():
         db.session.add(top)
     db.session.commit()
 
+db.drop_all()
 db.create_all()
 create_admin()
 insert_teams()
