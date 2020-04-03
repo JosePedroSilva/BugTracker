@@ -1,6 +1,6 @@
 from app import db
 from sqlalchemy.exc import IntegrityError
-from app.models import User, Role, Status, Topic, Team
+from app.models import User, Role, Status, Topic, Team, Severity
 
 def create_admin():
     u = User(username='firstAdmin', role_id=3)
@@ -60,6 +60,14 @@ def insert_topics():
         db.session.add(top)
     db.session.commit()
 
+def insert_severity():
+    sevs = ['low', 'medium', 'high', 'critical']
+    for s in sevs:
+        sev = Severity.query.filter_by(degree=s).first()
+        if sev is None:
+            sev = Severity(degree=s)
+        db.session.add(sev)
+    db.session.commit()
 
 db.create_all()
 
@@ -67,4 +75,5 @@ insert_teams()
 insert_roles()
 insert_status()
 insert_topics()
+insert_severity()
 create_admin()
