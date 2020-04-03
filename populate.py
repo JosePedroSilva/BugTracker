@@ -63,8 +63,9 @@ def insert_topics():
 
 
 db.create_all()
-create_admin()
+
 insert_teams()
 insert_roles()
 insert_status()
 insert_topics()
+create_admin()
