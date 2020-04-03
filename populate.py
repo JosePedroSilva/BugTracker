@@ -61,7 +61,7 @@ def insert_topics():
         db.session.add(top)
     db.session.commit()
 
-db.drop_all()
+
 db.create_all()
 create_admin()
 insert_teams()
