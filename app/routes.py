@@ -5,7 +5,7 @@ from flask_login import logout_user, login_required, current_user, login_user
 import pygal
 from pygal.style import CleanStyle, BlueStyle
 from . import app, db
-from .forms import LoginForm, RegistrationForm, TicketForm, ChangePassword, EditProfileForm, TakeOwnership, CommentForm, ChangeStatus
+from .forms import LoginForm, RegistrationForm, TicketForm, ChangePassword, EditProfileForm, TakeOwnership, CommentForm, ChangeStatus, EditTeams, CreateTeamForm, CreateTopicForm, EditTopicsForm
 from .models import User, Ticket, Team, Role, Comment, Topic
 from .decorators import admin_required, permission_required
 from .graph import GraphicalGauge
@@ -296,4 +296,71 @@ def edit_teams():
     teams = Team.query.order_by(Team.id.asc())
     return render_template('admin_team_view.html', title='edit_team', 
                             teams=teams)
+
+@app.route('/alter_team/<name>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def alter_team(name):
+    team = Team.query.filter_by(name=name).first()
+    form = EditTeams(team.name)
+    if form.validate_on_submit():
+        team.name = form.name.data
+        db.session.commit()
+        flash(f'Changes on team {team.name} have been saved.')
+        return redirect(url_for('edit_teams'))
+    elif request.method == 'GET':
+        form.name.data = team.name
+    return render_template('admin_alter_team.html', title='change_team_name',
+                            form=form, team=team)
+
+@app.route('/create_team', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def create_team():
+    form = CreateTeamForm()
+    if form.validate_on_submit():
+        team = Team(name=form.name.data)
+        db.session.add(team)
+        db.session.commit()
+        flash(f'Team {form.name.data} created.')
+        return redirect(url_for('edit_teams'))
+    return render_template('admin_create_team.html', title='create_team', form=form)
+
+@app.route('/edit_topics')
+@login_required
+@admin_required
+def edit_topics():
+    topics = Topic.query.order_by(Topic.id.asc()) 
+    return render_template('admin_topic_view.html', title='edit_topic',
+                            topics=topics)
+
+@app.route('/alter_topic/<topic>',methods=['GET', 'POST'])
+@login_required
+@admin_required
+def alter_topic(topic):
+    topic = Topic.query.filter_by(topic=topic).first()
+    form = EditTopicsForm(topic.topic)
+    if form.validate_on_submit():
+        topic.topic = form.topic.data
+        db.session.commit()
+        flash(f'Changes on topic {topic.topic} have been saved.')
+        return redirect(url_for('edit_topics'))
+    elif request.method == 'GET':
+        form.topic.data = topic.topic
+    return render_template('admin_alter_topic.html', title='change_topic', form=form, topic=topic)
+
+@app.route('/create_topic', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def create_topic():
+    form = CreateTopicForm()
+    if form.validate_on_submit():
+        topic = Topic(topic=form.topic.data)
+        db.session.add(topic)
+        db.session.commit()
+        flash(f"Topic '{form.topic.data}' created.")
+        return redirect(url_for('edit_topics'))
+    return render_template('admin_create_topic.html', 
+                            title='create_topic', form=form)
+
 

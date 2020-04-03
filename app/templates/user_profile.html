@@ -15,6 +15,7 @@
           <th scope="col">Team</th>
           <th scope="col">Role</th>
           <th scope="col">Last Login</th>
+          <th scope="col">Active</th>
         </tr>
       </thead>
       <tbody>
@@ -25,6 +26,7 @@
           <th scope="row">{{ user.team_members.name }}</th>
           <th scope="row">{{ user.role.name }}</th>
           <th scope="row">{{ user.last_seen }}</th>
+          <th scope="row">{{ user.active }}</th>
         </tr>
         {% endfor %}
     </tbody>

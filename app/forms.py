@@ -120,4 +120,52 @@ class CommentForm(FlaskForm):
     body = TextAreaField('New Comment:', validators=[DataRequired(), Length(min=1, max=1000)])
     submit2 = SubmitField('Submit Comment')
 
+class EditTeams(FlaskForm):
+    name = StringField('New team name:', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+    def __init__(self, original_name, *args, **kwargs):
+        super(EditTeams, self).__init__(*args, **kwargs)
+        self.original_name = original_name
+
+    def validate_name(self, name):
+        if name.data != self.original_name:
+            team = Team.query.filter_by(name=self.name.data).first()
+            if team is not None:
+                raise ValidationError('Team name in use, please use a diferent name.')
+
+class CreateTeamForm(FlaskForm):
+    name = StringField('Team name', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+    # def not running, app is not catching error, it is raising on jinja error
+    def validate_team(self, team):
+        newteam = Team.query.filter_by(name=team.data).first()
+        if newteam is not None:
+            raise ValidationError('Team already created')
+
+
+class CreateTopicForm(FlaskForm):   
+    topic = StringField('New topic', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+    def validate_topic(self, topic):
+        topic = Topic.query.filter_by(topic=topic.data).first()
+        if topic is not None:
+            raise ValidationError('Topic already created')
+
+
+class EditTopicsForm(FlaskForm):
+    topic = StringField('New topic name:', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+    def __init__(self, original_topic, *args, **kwargs):
+        super(EditTopicsForm, self).__init__(*args, **kwargs)
+        self.original_topic = original_topic
+
+    def validate_topic(self, topic):
+        if topic.data != self.original_topic:
+            topic = Topic.query.filter_by(topic=self.topic.data).first()
+            if topic is not None:
+                raise ValidationError('Topic already created, please choose a diferent topic name.')
 
