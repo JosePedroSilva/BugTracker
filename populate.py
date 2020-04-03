@@ -1,6 +1,6 @@
 from app import db
 from sqlalchemy.exc import IntegrityError
-from app.models import User, Role, Status, Topic
+from app.models import User, Role, Status, Topic, Team
 
 def create_admin():
     u = User(username='firstAdmin')
