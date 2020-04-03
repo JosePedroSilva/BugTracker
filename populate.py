@@ -39,7 +39,6 @@ def insert_roles():
         role.reset_permissions()
         for perm in roles[r]:
             role.add_permission(perm)
-        role.default = (role.name == default_role)
         db.session.add(role)
     db.session.commit()
 
