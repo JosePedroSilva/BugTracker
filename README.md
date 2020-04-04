@@ -17,7 +17,6 @@ https://bug-tracker-js.herokuapp.com/
   
 
 ```
-
 Test users:
 
 	username: admin // password: admin
@@ -31,16 +30,12 @@ Test users:
   
 
 ## Requirements
-
 Python 3.6+, python-pip, virtualenv
 
   
   
 
 ## Features
-
-  
-
 Some features included in this demo application are:
 
   
