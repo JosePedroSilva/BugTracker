@@ -1,6 +1,16 @@
 # Bug tracker
 
 Bug tracker with multi level user and ticket management system
+
+## Demo
+
+Deployed:
+https://bug-tracker-js.herokuapp.com/
+
+username: admin // password: admin
+username: manager // password: manager
+username: user // password: user
+
 ## Requirements
 Python 3.6+, python-pip, virtualenv
 ## Getting Started
