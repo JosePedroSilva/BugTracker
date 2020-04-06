@@ -1,7 +1,7 @@
-__pycache__
-.vscode
-env
-logs
-app/__pycache__
-.flaskenv
-app/fake.py
+# __pycache__
+# .vscode
+# env
+# logs
+# app/__pycache__
+# .flaskenv
+# app/fake.py
