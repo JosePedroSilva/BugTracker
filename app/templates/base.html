@@ -42,7 +42,8 @@
               {% if g.search_form %}
               <form class="form-inline my-2 my-lg-0" method="get" action="{{ url_for('search') }}">
                 <div class="form-group">
-                  {{ g.search_form.q(size=20, class='form-control') }}{{ g.search_form.submit() }}
+                  {{ g.search_form.q(size=20, class='form-control'),
+                  placeholder=g.search_form.q.label.text) }}
               </div>
               </form>
               {% endif %}
