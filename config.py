@@ -13,3 +13,4 @@ class Config(object):
     ADMINS = ['your-email@example.com']
     TICKETS_PER_PAGE = 10
     LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')
+    ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL')

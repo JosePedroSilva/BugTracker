@@ -1,11 +1,11 @@
 from datetime import datetime
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, g
 from werkzeug.urls import url_parse
 from flask_login import logout_user, login_required, current_user, login_user
 import pygal
 from pygal.style import CleanStyle, BlueStyle
 from . import app, db
-from .forms import LoginForm, RegistrationForm, TicketForm, ChangePassword, EditProfileForm, TakeOwnership, CommentForm, ChangeStatus, EditTeams, CreateTeamForm, CreateTopicForm, EditTopicsForm
+from .forms import LoginForm, RegistrationForm, TicketForm, ChangePassword, EditProfileForm, TakeOwnership, CommentForm, ChangeStatus, EditTeams, CreateTeamForm, CreateTopicForm, EditTopicsForm, SearchForm
 from .models import User, Ticket, Team, Role, Comment, Topic
 from .decorators import admin_required, permission_required
 from .graph import GraphicalGauge
@@ -15,6 +15,22 @@ def before_request():
     if current_user.is_authenticated:
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
+        g.search_form = SearchForm()
+
+@app.route('/search')
+@login_required
+def search():
+    if not g.search_form.validate():
+        return redirect(url_for('index'))
+    page = request.args.get('page', 1, type=int)
+    tickets, total = Ticket.search(g.search_form.q.data, page,
+                               app.config['TICKETS_PER_PAGE'])
+    next_url = url_for('search', q=g.search_form.q.data, page=page + 1) \
+        if total > page * app.config['TICKETS_PER_PAGE'] else None
+    prev_url = url_for('search', q=g.search_form.q.data, page=page - 1) \
+        if page > 1 else None
+    return render_template('search.html', title='Search', tickets=tickets,
+                           next_url=next_url, prev_url=prev_url)
 
 
 @app.route('/', methods=['GET', 'POST'])

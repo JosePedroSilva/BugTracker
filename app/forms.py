@@ -1,8 +1,9 @@
+from flask import request
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from app.models import User, Team, Severity, Role, Topic, Status
+from .models import User, Team, Severity, Role, Topic, Status
 
 def team_choice():
     return Team.query
@@ -169,3 +170,13 @@ class EditTopicsForm(FlaskForm):
             if topic is not None:
                 raise ValidationError('Topic already created, please choose a diferent topic name.')
 
+class SearchForm(FlaskForm):
+    q = StringField(('Search'), validators=[DataRequired()])
+    submit = SubmitField('Search')
+
+    def __init__(self, *args, **kwargs):
+        if 'formdata' not in kwargs:
+            kwargs['formdata'] = request.args
+        if 'csrf_enabled' not in kwargs:
+            kwargs['csrf_enabled'] = False
+        super(SearchForm, self).__init__(*args, **kwargs)

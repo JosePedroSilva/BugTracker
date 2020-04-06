@@ -39,10 +39,13 @@
                   <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
                 </li>
               </ul>
-              <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+              {% if g.search_form %}
+              <form class="form-inline my-2 my-lg-0" method="get" action="{{ url_for('search') }}">
+                <div class="form-group">
+                  {{ g.search_form.q(size=20, class='form-control') }}{{ g.search_form.submit() }}
+              </div>
               </form>
+              {% endif %}
             </div>
           </nav>
         <hr>
