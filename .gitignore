@@ -4,3 +4,4 @@ env
 logs
 app/__pycache__
 .flaskenv
+app/fake.py
