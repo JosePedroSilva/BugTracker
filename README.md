@@ -12,7 +12,7 @@ Bug tracker with multi level user and ticket management system
 
 Deployed:
 
-https://bug-tracker-js.herokuapp.com/
+https://bug-tracker-new.herokuapp.com/
 
   
 
