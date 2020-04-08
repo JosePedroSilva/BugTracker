@@ -19,9 +19,9 @@
 } */
 
 .tickets_meta{
-  opacity: 0.6;
+  opacity: 0.9;
   padding-left: 5%;
-  font-size: 0.8em;
+  font-size: 0.9em;
 }
 
 .ticket_reference{
@@ -114,4 +114,57 @@
 .adminusers-table{
   padding-top: 30px;
   padding-left: 10px;
+}
+
+.index-wrapper{
+  width: 100%;
+  padding-left: 200px;
+  padding-right: 200px;
+  padding-top: 75px;
+}
+
+.index-tickets{
+  padding-top: 50px;
+}
+
+.create-wrapper{
+  width: 100%;
+  padding-left: 300px;
+  padding-right: 300px;
+  padding-top: 75px;
+}
+
+.ticket-wrapper{
+  width: 100%;
+  padding-left: 150px;
+  padding-right: 300px;
+  padding-top: 75px;
+}
+
+.ticket-description{
+  padding-top: 10px;
+  padding-left: 10px;
+}
+
+.ticket-comments{
+  padding-top: 20px;
+}
+
+.comment-content{
+  font-weight: bold;
+  padding-left: 30px;
+}
+
+.search-wrapper{
+  width: 100%;
+  padding-left: 150px;
+  padding-right: 300px;
+  padding-top: 75px;
+}
+
+.error-wrapper{
+  width: 100%;
+  padding-left: 150px;
+  padding-right: 300px;
+  padding-top: 75px;
 }

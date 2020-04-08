@@ -1,74 +1,79 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<h3>Ref: {{ ticket.id }}</h3>
-<h2>{{ ticket.title }}</h2>
-
-{% if current_user.role_id == 2 or current_user.role_id == 3 %}
-<form action="" method="post">
-    {{ form.hidden_tag() }}
-    <p>
-        {{ form.csrf_token }}
-        {{ form.ticket_owner.label }}
-        {{ form.ticket_owner }}
-        {% for error in form.ticket_owner.errors %}
-        <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-        {{ form.submit() }}</p>
-</form>
-<form action="" method="post">
-    {{ statusForm.hidden_tag() }}
-    <p>
-        {{ statusForm.csrf_token }}
-        {{ statusForm.current_status.label }}
-        {{ statusForm.current_status }}
-        {% for error in statusForm.current_status.errors %}
-        <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-        {{ statusForm.submit3() }}</p>
-</form>
-{% endif %}
-<p class="tickets_meta" >
-    {% if ticket.ticket_severity.degree == 'low' %}
-        <br>Priority: <span style="color: #3CD448;">{{ ticket.ticket_severity.degree }}</span>
-    {% elif ticket.ticket_severity.degree == 'medium' %}
-        <br>Priority: <span style="color: #B1E001;">{{ ticket.ticket_severity.degree }}</span>
-    {% elif ticket.ticket_severity.degree == 'high' %}
-        <br>Priority: <span style="color: rgb(238, 200, 8);">{{ ticket.ticket_severity.degree }}</span>
-    {% else %}
-        <br>Priority: <span style="color: #DD0A08;">{{ ticket.ticket_severity.degree }}</span>
+<div class="ticket-wrapper">
+    <h3>Ref: {{ ticket.id }}</h3>
+    <h2>{{ ticket.title }}</h2>
+    <p class="tickets_meta" >
+        {% if ticket.ticket_severity.degree == 'low' %}
+            <br>Priority: <span style="color: #3CD448;">{{ ticket.ticket_severity.degree }}</span>
+        {% elif ticket.ticket_severity.degree == 'medium' %}
+            <br>Priority: <span style="color: #B1E001;">{{ ticket.ticket_severity.degree }}</span>
+        {% elif ticket.ticket_severity.degree == 'high' %}
+            <br>Priority: <span style="color: rgb(238, 200, 8);">{{ ticket.ticket_severity.degree }}</span>
+        {% else %}
+            <br>Priority: <span style="color: #DD0A08;">{{ ticket.ticket_severity.degree }}</span>
+        {% endif %}
+        {% if current_user.role_id == 1 %}
+            <br>Status: {{ (ticket.ticket_status.status)}}
+        {% endif %}
+        <br>Created: {{ moment(ticket.timestamp).fromNow() }} 
+        <br>Reported by: {{ ticket.author.username }} 
+        <br>Team: {{ ticket.team_tickets.name }} <br></p>
+        {% if current_user.role_id == 2 or current_user.role_id == 3 %}
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.csrf_token }}
+                {{ form.ticket_owner.label }}
+                {{ form.ticket_owner }}
+                {% for error in form.ticket_owner.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+                {{ form.submit() }}</p>
+        </form>
+        <form action="" method="post">
+            {{ statusForm.hidden_tag() }}
+            <p>
+                {{ statusForm.csrf_token }}
+                {{ statusForm.current_status.label }}
+                {{ statusForm.current_status }}
+                {% for error in statusForm.current_status.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+                {{ statusForm.submit3() }}</p>
+        </form>
     {% endif %}
-    <br>Status: {{ (ticket.ticket_status.status)}}
-    <br>Created: {{ moment(ticket.timestamp).fromNow() }} 
-    <br>Reported by: {{ ticket.author.username }} 
-    <br>Team: {{ ticket.team_tickets.name }} <br></p>
-
-<p> <br>Description: <br> {{ ticket.description }}</p>
-
-<h2>Comments: </h2>
-{% for comment in comments %}
-<table class="table table-striped">
-    <tr valign="top">
-        <td>
-            Comment by: {{ comment.comment_author.username }} <br>
-            Comment:  {{ comment.body }} <br>
-            Created: {{ moment(comment.timestamp).fromNow() }} 
-        </td>
-    </tr>
-</table>
-{% endfor %}
-
-
-<form action="" method="post">
-    {{ commentForm.hidden_tag() }}
-    <p>
-        {{ commentForm.body.label }}<br>
-        {{ commentForm.body(cols=200, rows=10) }}<br>
-        {% for error in commentForm.body.errors %}
-        <span style="color: red;">[{{ error }}]</span>
+    
+    <h5>Description:</h5>
+    <p class="ticket-description">{{ ticket.description }}</p>
+    
+    <div class="ticket-comments">
+        <h2>Comments: </h2>
+        {% for comment in comments %}
+            <table class="table table-striped">
+                <tr valign="top">
+                    <td>
+                        <p class="comment-content">{{ comment.body }}</p>
+                        Comment by: {{ comment.comment_author.username }} <br>
+                        {{ moment(comment.timestamp).fromNow() }} 
+                    </td>
+                </tr>
+            </table>    
         {% endfor %}
-    </p>
-    <p>{{ commentForm.submit2() }}</p>
-</form>
+
+
+        <form action="" method="post">
+            {{ commentForm.hidden_tag() }}
+            <p>
+                {{ commentForm.body.label }}<br>
+                {{ commentForm.body(cols=200, rows=10) }}<br>
+                {% for error in commentForm.body.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ commentForm.submit2() }}</p>
+        </form>
+    </div>
+</div>
 {% endblock %}

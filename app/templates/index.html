@@ -2,13 +2,15 @@
 
 {% block content %}
 
-{% if gauge_author %}
-<div id="chart">
-    <embed type="image/svg+xml" src= {{ gauge_author|safe }} />
-  </div>
-{% endif %}
+<div class="index-wrapper">
+    {% if gauge_author %}
+        <div id="chart">
+            <embed type="image/svg+xml" src= {{ gauge_author|safe }} />
+        </div>
+    {% endif %}
     
-    <h2>Tickets unallocated</h2>
+    <div class="index-tickets">
+        <h2>Tickets unallocated</h2>
 
         {% for ticket in tickets %}
             {% include '_ticket.html' %}
@@ -24,6 +26,8 @@
                 <li class="page-item"><a class="page-link" href="{{ next_url }}">Next</a></li>
             {% endif %}
         </nav>
+    </div>
+</div>
 {% endblock %}
 
 
