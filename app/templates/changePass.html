@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% include '_settingsNAV.html' %}
-<h1>Change Password</h1>
+{% include '_sideBarSettings.html' %}
+<div class="change_pass">
+    <h1>Change Password</h1>
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>
@@ -21,4 +22,5 @@
         </p>
         <p>{{ form.submit() }}</p>
     </form>
+</div>
 {% endblock %}

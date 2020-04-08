@@ -1,0 +1,11 @@
+<div class="wrapper">
+    <div class="sidebar">
+        <h2>Tickets</h2>
+        <ul>
+            <li><a href="{{ url_for('handling', username=current_user.username) }}"><i class="fas fa-user"></i> Handled by me</a></li>
+            <li><a href="{{ url_for('mytickets_raised', username=current_user.username) }}"><i class="fas fa-user-friends"></i> Raised by me</a></li>
+            <li><a href="{{ url_for('mytickets_closed', username=current_user.username) }}"><i class="fas fa-lock"></i></i> My Tickets Closed</a></li>
+            <li><a href="{{ url_for('myTeam_tickets') }}"><i class="fas fa-users"></i> My Team</a></li>
+        </ul>
+    </div>
+</div>

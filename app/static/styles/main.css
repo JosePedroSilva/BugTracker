@@ -13,10 +13,10 @@
         Main body
  ********************************/
 
-.content{
+/* .content{
   width: 80%;
   padding-left: 10%;
-}
+} */
 
 .tickets_meta{
   opacity: 0.6;
@@ -28,9 +28,9 @@
   margin-bottom: 15px;
 }
 
-.Stats{
+/* .Stats{
   padding: 10%;
-}
+} */
 
 /* #chart{
   max-width: 600px;
@@ -43,4 +43,59 @@
   padding-top: 5%;
 }
 
+/********************************
+        Side bar
+ ********************************/
 
+.sidebar{
+  position: fixed;
+  width: 250px;
+  height: 100%;
+  padding: 30px 0;
+}
+
+.sidebar h2{
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.sidebar ul li{
+  padding: 15px;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  border-top: 1px solid rgba(225,225,225,0.05);
+}
+
+.sidebar ul li a{
+  color: black;
+  display: block;
+}
+
+.sidebar ul li a .fas{
+  width: 25px;
+}
+
+.change_pass{
+  width: 100%;
+  padding-left: 300px;
+}
+
+.settings{
+  width: 100%;
+  padding-left: 300px;
+}
+
+.settings h3{
+  padding-top: 40px;
+  padding-left: 30px;
+}
+
+.settings p{
+  padding-top: 20px;
+  padding-left: 30px;
+}
+
+.mytickets-wrapper{
+  width: 100%;
+  padding-left: 300px;
+  padding-right: 300px;
+}

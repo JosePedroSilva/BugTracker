@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% include '_settingsNAV.html' %}
-  
+{% include '_sideBarSettings.html' %}
+
+<div class="settings">
 <h1>User: {{ user.username }}</h1>
 
 <h3>My team: {{ user.team_members.name }} </h3>
@@ -11,6 +12,6 @@
 {{ u.username }} <br>
 {% endfor %}
 </p>
-
+</div>
 
 {% endblock %}

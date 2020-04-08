@@ -1,0 +1,9 @@
+<div class="wrapper">
+    <div class="sidebar">
+        <h2>Options</h2>
+        <ul>
+            <li><a href="{{ url_for('settings', username=current_user.username) }}"><i class="fas fa-info"></i> Information</a></li>
+            <li><a href="{{ url_for('change_password') }}"><i class="fas fa-key"></i> Change Password</a></li>
+        </ul>
+    </div>
+</div>
