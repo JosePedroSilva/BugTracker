@@ -1,18 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% include '_adminNav.html' %}
-
-<h1>Create team</h1>
-<form action="" method="post">
-    {{ form.hidden_tag() }}
-    <p>
-        {{ form.name.label }}<br>
-        {{ form.name(size=64) }}<br>
-        {% for error in form.name.errors %}
-        <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-    </p>
-    <p>{{ form.submit() }}</p>
-</form>
+{% include '_sideBarAdmin.html' %}
+<div class="admin-wrapper">
+    <h1>Create team</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.name.label }}<br>
+            {{ form.name(size=64) }}<br>
+            {% for error in form.name.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+</div>
 {% endblock %}

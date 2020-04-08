@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% include '_adminNav.html' %}
-
+{% include '_sideBarAdmin.html' %}
+<div class="admin-wrapper">
     <h1>Teams</h1>
     
     <div class="team_table">
@@ -24,4 +24,5 @@
         </table>  
         <h5><a href="{{ url_for('create_topic') }}">Create new topic</a></h5>
     </div>
+</div>
 {% endblock %}

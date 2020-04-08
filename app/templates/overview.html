@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% include '_adminNav.html' %}
-<div id="chart">
-  <embed type="image/svg+xml" src= {{ tickets_per_team|safe }} />
-  <embed type="image/svg+xml" src= {{ tickets_per_status|safe }} />
-  <embed type="image/svg+xml" src= {{ tickets_per_sev|safe }} />
+{% include '_sideBarAdmin.html' %}
+<div class="admin-wrapper">
+  <div id="chart">
+    <embed type="image/svg+xml" src= {{ tickets_per_team|safe }} />
+    <embed type="image/svg+xml" src= {{ tickets_per_status|safe }} />
+    <embed type="image/svg+xml" src= {{ tickets_per_sev|safe }} />
+  </div>
 </div>
-
   
 {% endblock %}
 

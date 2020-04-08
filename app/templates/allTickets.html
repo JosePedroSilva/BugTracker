@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% include '_adminNav.html' %}
+{% include '_sideBarAdmin.html' %}
+<div class="admin-wrapper">
     <h1>All tickets</h1>
 
         {% for ticket in tickets %}
@@ -18,4 +19,5 @@
                 <li class="page-item"><a class="page-link" href="{{ next_url }}">Next</a></li>
             {% endif %}
         </nav>
+</div>
 {% endblock %}

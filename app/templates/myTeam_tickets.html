@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% include '_myTicketsNav.html' %}
-
+{% include '_sideBarTickets.html' %}
+<div class="mytickets-wrapper">
 <table>
     <tr valign="top">
         <td><h1>My team issues</h1></td>
@@ -25,4 +25,5 @@
         <li class="page-item"><a class="page-link" href="{{ next_url }}">Next</a></li>
     {% endif %}
 </nav>
+</div>
 {% endblock %}

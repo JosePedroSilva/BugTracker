@@ -179,7 +179,7 @@ def mytickets_closed(username):
         if tickets.has_next else None
     prev_url = url_for('mytickets_closed', page=tickets.prev_num, username=username) \
         if tickets.has_prev else None
-    return render_template('user_tickets.html', title='myticketsClosed',
+    return render_template('user_tickets_closed.html', title='myticketsClosed',
                             user=user, tickets=tickets.items,
                             next_url=next_url, prev_url=prev_url)
 
