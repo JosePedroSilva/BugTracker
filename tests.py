@@ -6,7 +6,7 @@ from app.models import User, Ticket, Role, Severity, Team, Status, Comment
 class UserModelCase(unittest.TestCase):
     def setUp(self):
         """Creates db"""
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:2427@localhost/bugtest'
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:___@localhost/bugtest'
         db.create_all()
 
     def tearDown(self):
